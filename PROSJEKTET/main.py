@@ -1,18 +1,6 @@
-print("helloworld")
+import numpy as np
 
-print("New changes to code")
+msg = "Roll a dice"
+print(msg)
 
-
-print("Se det funker")
-
-
-
-
-
-
-
-
-
-
-
-
+print(np.random.randint(1,9))
