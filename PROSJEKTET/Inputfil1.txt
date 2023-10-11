@@ -3,7 +3,7 @@
 #Antall element
 23
 
-#Her kommer info om alle knutepunktene i rekkefÃ¸lgen:
+#KP-info i rekkefølge:
 #x-koordinat [m], y-koordinat [m], Knutepunktsnummer, Hvordan det er innspent(0 for fri, 1 for fast innspent)
 0, 0, 0, 1
 160.5, 0, 1, 0
