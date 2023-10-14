@@ -33,16 +33,12 @@ def read_input_file(file_path):
 
             elif line.startswith('#Element-info i rekkefølge:'):
                 i+=1 # Hopp over kommentarlinje
-                for _ in range(antall_element):
+                for _ in range(antall_element): #Fikser 
                         i += 1  
                         data = lines[i].strip().split(', ')
-                        if len(data) == 6:
-                            element_info = [float(value) if value.replace('.', '', 1).isdigit() else value for value in data]
-                            elementer.append(element_info)
-                        elif len(data) == 8:
-                            element_info = [float(value) if value.replace('.', '', 1).isdigit() else value for value in data]
-                            elementer.append(element_info)
-            
+                        element_info = [float(value) if value.replace('.', '', 1).isdigit() else value for value in data]
+                        elementer.append(element_info)
+
             elif line.startswith('#Antall fordelte laster:'):
                 antall_fordelte_laster = int(lines[i + 1])
                 i += 2
