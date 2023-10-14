@@ -1,12 +1,12 @@
 import numpy as np
-from readfromfile import read_input_file #bør dobbelsjekkes 
+from readfromfile import readfromfile #bør dobbelsjekkes 
 from I import I #MÅ DOBBELSJEKKES 
 
 
 
 #Tester funksjoner:
 file_path = 'PROSJEKTET/Inputfil1.txt'
-knutepunkter, elementer, fordelte_laster, punktlaster = read_input_file(file_path)
+knutepunkter, elementer, fordelte_laster, punktlaster = readfromfile(file_path)
 
 print('\nknutepunkter')
 print(len(knutepunkter))

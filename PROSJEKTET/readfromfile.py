@@ -1,4 +1,4 @@
-def read_input_file(file_path):
+def readfromfile(file_path):
 
     #Tomme lister som skall fylles
     knutepunkter = []
