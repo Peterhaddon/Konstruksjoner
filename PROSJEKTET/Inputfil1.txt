@@ -22,7 +22,7 @@
 25.5, 93, 13, 0
 
 #Element-info i rekkefølge:
-#Knutepunkt 1, Knutepunkt 2, E-modul [Gpa], Geometri (c for rÃ¸r, i for i-profil), Dimensjonene til profilene [mm]  
+#Knutepunkt 1, Knutepunkt 2, E-modul [Gpa], Geometri (c for rør, i for i-profil), Dimensjonene til profilene [mm]. I profil hhv: hs, ts, bf, tf 
 0, 1, 210, c, 980, 1200
 1, 2, 210, c, 980, 1200
 0, 3, 210, c, 1260, 1500
@@ -45,7 +45,7 @@
 9, 11, 70, i, 744, 16, 400, 28
 10, 13, 70, i, 744, 16, 400, 28
 11, 12, 70, i, 744, 16, 400, 28
-12, 13, 70, i, 744, 16, 400, 28
+12, 13, 70, b, 100, 10
 
 #Antall fordelte laster:
 6
