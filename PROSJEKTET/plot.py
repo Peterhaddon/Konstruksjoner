@@ -41,7 +41,8 @@ def plot_structure(ax, punkt, elem, numbers, index_start):
             ax.text(nodes[inod, 0], nodes[inod, 1], str(inod + index_start), color = 'red', fontsize = 16)
 
 
-def format_data(knutepunkter, elementer):
+def format_data(knutepunkter, elementer): #formaterer lister så det kan tolkes riktig av plot_structure
+
     # Extract node coordinates from knutepunkter list
     kp_koordinater = np.array([[node[1], node[2]] for node in knutepunkter])
     

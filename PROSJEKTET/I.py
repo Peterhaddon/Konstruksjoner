@@ -1,6 +1,6 @@
 import numpy as np
 
-def I(element): # Regner ut Iy for diverse profiler
+def I(element): # Regner ut I_y for diverse profiler
 
     if element[4] == 'i': # I-profil
         tf = element[8] # tykkelse flens 

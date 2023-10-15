@@ -14,6 +14,7 @@ def readfromfile(file_path):
             line = lines[i].strip()
 
             #Funksjonen krever at oppsettet av inputfil følger 'riktig 'rekkefølge!
+            #Funksjonen går nedover inputfila og legger dataen i diverse lister og variabler
 
             if line.startswith('#Antall knutepunkt'):
                 antall_knutepunkt = int(lines[i + 1])
@@ -49,7 +50,7 @@ def readfromfile(file_path):
                 for _ in range(antall_fordelte_laster):
                         i += 1  
                         data = lines[i].strip().split(', ')
-                        if len(data) == 4:
+                        if len(data) == 4: #Sjekker at det er formattert riktig
                             fordelte_laster_info = [float(value) if value.replace('.', '', 1).isdigit() else value for value in data]
                             fordelte_laster.append(fordelte_laster_info) #Fyller lista med data fra inputfil
 
@@ -62,7 +63,7 @@ def readfromfile(file_path):
                 for _ in range(antall_punktlaster):
                         i += 1  
                         data = lines[i].strip().split(', ')
-                        if len(data) == 4:
+                        if len(data) == 4: #Sjekker at det er formattert riktig
                             punktlaster_info = [float(value) if value.replace('.', '', 1).isdigit() else value for value in data]
                             punktlaster.append(punktlaster_info) #Fyller lista med data fra inputfil
 

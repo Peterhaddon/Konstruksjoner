@@ -1,3 +1,4 @@
+
 def lengder(knutepunkt, element, nelem):
 
     #Tror denne skal lage en liste med lengden av alle element i samme rekkefølge som 'elementer'
