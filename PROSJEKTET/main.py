@@ -1,16 +1,31 @@
+#importerer nødvendige biblotek
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import CubicSpline
+
+#importerer filer og funksjoner
 from plot import format_data, setup_plots, plot_structure #ser ut til å fungere, mangler def_structure
 from readfromfile import readfromfile #bør dobbelsjekkes når vi begynner med the real deal
 from lengder import lengder #Må gjøres, se utdelt kode
+from global_stivhetsmatrise import global_stivhetsmatrise
 from I import I #MÅ DOBBELSJEKKES 
 
+#TO DO:
+ # Diskretisering: få alle kp koordinater, nummerer de, elementnummer. kok?
+ # lengder-funksjon
+ # sjekk I funksjon opp mot kjente tverrsnitt
+ # Lag stivhetsfunksjon: EI, lag også EI/L for lokal stivhetsmatrise
+ # Fullfør global_stivhetsmatrise, test for en kjent oppgave så vi ser om d funker
 
 
-#Tester funksjoner:
+#bestemmer greier som er nødvendige for testing av funksjoner:
 file_path = 'PROSJEKTET/Inputfil2.txt'
 knutepunkter, elementer, fordelte_laster, punktlaster = readfromfile(file_path)
+kp_koordinater, elementer_kp_til_kp = format_data(knutepunkter, elementer)
+antall_kp = len(knutepunkter)
+
+
+# TESTING
 
 # print('\nknutepunkter')
 # print(len(knutepunkter))
@@ -32,8 +47,6 @@ knutepunkter, elementer, fordelte_laster, punktlaster = readfromfile(file_path)
 # #box:
 # print(I(elementer[2])/(10**6))
 
-# # TESTING
-# kp_koordinater, elementer_kp_til_kp = format_data(knutepunkter, elementer)
 # numbers = 1
 # first_index = 0
 # fig_init, ax_init, fig_def, ax_def = setup_plots()
@@ -41,3 +54,5 @@ knutepunkter, elementer, fordelte_laster, punktlaster = readfromfile(file_path)
 # plt.show()
 
 # print(lengder(knutepunkter, elementer, len(elementer)))
+
+# print(global_stivhetsmatrise(elementer_kp_til_kp, antall_kp))
