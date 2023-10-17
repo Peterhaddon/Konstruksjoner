@@ -7,7 +7,7 @@ from scipy.interpolate import CubicSpline
 from plot import * #ser ut til å fungere, mangler def_structure
 from readfromfile import readfromfile #bør dobbelsjekkes når vi begynner med the real deal
 from lengder import lengder #Må gjøres, se utdelt kode
-from global_stivhetsmatrise import global_stivhetsmatrise
+from stivhetsmatrise import *
 from I import I #MÅ DOBBELSJEKKES 
 
 #TO DO:
@@ -19,7 +19,7 @@ from I import I #MÅ DOBBELSJEKKES
 
 
 #bestemmer variabler som er nødvendige for testing av funksjoner:
-file_path = 'PROSJEKTET/Inputfil2.txt'
+file_path = 'PROSJEKTET/Inputfil3.txt'
 knutepunkter, elementer, fordelte_laster, punktlaster = readfromfile(file_path)
 kp_koordinater, elementer_kp_til_kp = format_data(knutepunkter, elementer)
 antall_kp = len(knutepunkter)
@@ -55,4 +55,5 @@ antall_kp = len(knutepunkter)
 
 # print(lengder(knutepunkter, elementer, len(elementer)))
 
-# print(global_stivhetsmatrise(elementer_kp_til_kp, antall_kp))
+et_element_stivhetsmatrise= element_stivhetsmatrise(elementer[0])
+print(global_stivhetsmatrise(elementer_kp_til_kp, antall_kp,et_element_stivhetsmatrise))
