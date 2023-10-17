@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import CubicSpline
 
-#importerer filer og funksjoner
-from plot import format_data, setup_plots, plot_structure #ser ut til å fungere, mangler def_structure
+#importerer funksjoner definert i andre filer
+from plot import * #ser ut til å fungere, mangler def_structure
 from readfromfile import readfromfile #bør dobbelsjekkes når vi begynner med the real deal
 from lengder import lengder #Må gjøres, se utdelt kode
 from global_stivhetsmatrise import global_stivhetsmatrise
@@ -18,7 +18,7 @@ from I import I #MÅ DOBBELSJEKKES
  # Fullfør global_stivhetsmatrise, test for en kjent oppgave så vi ser om d funker
 
 
-#bestemmer greier som er nødvendige for testing av funksjoner:
+#bestemmer variabler som er nødvendige for testing av funksjoner:
 file_path = 'PROSJEKTET/Inputfil2.txt'
 knutepunkter, elementer, fordelte_laster, punktlaster = readfromfile(file_path)
 kp_koordinater, elementer_kp_til_kp = format_data(knutepunkter, elementer)
