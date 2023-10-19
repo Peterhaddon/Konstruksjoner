@@ -11,15 +11,16 @@ from stivhetsmatrise import *
 from I import * #MÅ DOBBELSJEKKES 
 
 #TO DO:
- # Diskretisering: få alle kp koordinater, nummerer de, elementnummer. kok?
+
  # lengder-funksjon
+ # Areal-funksjon
  # sjekk I funksjon opp mot kjente tverrsnitt
- # Lag stivhetsfunksjon: EI, lag også EI/L for lokal stivhetsmatrise
- # Fullfør global_stivhetsmatrise, test for en kjent oppgave så vi ser om d funker
+
+ # Dobbelsjekk at ALT(!) i stivhetsmatrise er riktig
 
 
 #bestemmer variabler som er nødvendige for testing av funksjoner:
-file_path = 'PROSJEKTET/Inputfil2.txt'
+file_path = 'PROSJEKTET/Inputfil3.txt'
 knutepunkter, elementer, fordelte_laster, punktlaster = readfromfile(file_path)
 kp_koordinater, elementer_kp_til_kp = format_data(knutepunkter, elementer)
 antall_kp = len(knutepunkter)
@@ -54,7 +55,4 @@ antall_kp = len(knutepunkter)
 
 # print(lengder(knutepunkter, elementer, len(elementer)))
 
-et_element_stivhetsmatrise = element_stivhetsmatrise(elementer[0])
-# print(global_stivhetsmatrise(elementer_kp_til_kp, antall_kp,et_element_stivhetsmatrise))
-
-print(et_element_stivhetsmatrise)
+print(np.round(global_stivhetsmatrise(knutepunkter, elementer),1))

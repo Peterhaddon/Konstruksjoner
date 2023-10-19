@@ -38,7 +38,7 @@ def readfromfile(file_path):
                 for _ in range(antall_element): 
                         i += 1  
                         data = lines[i].strip().split(', ')
-                        element_info = [float(value) if value.replace('.', '', 1).isdigit() else value for value in data]
+                        element_info = [int(value) if value.replace('.', '', 1).isdigit() else value for value in data]
                         elementer.append(element_info) #Fyller lista med data fra inputfil
 
             elif line.startswith('#Antall fordelte laster:'):

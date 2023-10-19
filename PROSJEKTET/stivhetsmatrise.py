@@ -2,15 +2,14 @@ import numpy as np
 
 def element_stivhetsmatrise(element):
 
-    #Må bestemmes for aktuelt element
+    #Må bestemmes for aktuelt element!
+
     L=1
     E=1
     A=1
     Iy=1
 
     #setter opp tim 6x6 matrise, og adderer inn stivheter 
-
-    #ER FORTEGN osv RIKTIG???
 
     k_lokal_matrise = np.zeros((6, 6)) 
     k_lokal_matrise [0][0] += E*A/L
@@ -36,107 +35,79 @@ def element_stivhetsmatrise(element):
 
     return k_lokal_matrise
 
+def trans_matrise(fi):
 
-
-
-
-
-
-
-
-
-
-def global_stivhetsmatrise(konnektivitets_matrise, antall_kp, elementer): #elementdata osv må og inn
+    cos_fi = np.cos(fi)
+    sin_fi = np.sin(fi)
     
-    #lager en tom totalstivhetsmatrise med 3*npunk fordi vi har 3 frihetsgrader
-    gsm = np.zeros((antall_kp*3, antall_kp*3))
-    print(gsm)
+    T = np.array([
+        [cos_fi, sin_fi, 0, 0, 0, 0],
+        [-sin_fi, cos_fi,  0, 0, 0, 0],
+        [0,      0,       1, 0, 0, 0],
+        [0,      0,       0, cos_fi, sin_fi, 0],
+        [0,      0,       0, -sin_fi, cos_fi,  0],
+        [0,      0,       0, 0,      0,       1]
+    ]) #ER DENNE RIKTIG? KOKEN HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
+    return T
 
-    #Husk å transformere til globalt system
-    k_global = element_stivhetsmatrise(elementer[0])
-    # for i in range (0):
-    i=1
-    element = elementer[i]
-    nj1 = element[1]
-    nj2 = element[2]
-    
-    for row in range(6):
-    # Finner nummerering til lokale stivhetselementer i global matrise,vitererer nedover , finner global rad , og tilsvarende plassering av kolonner globalt , for raden
-        if row < 3:
-            n = 3*(nj1 -1)+(row)
-            m_1 = 3*( nj1 -1) 
-            m_2 = 3*(nj1 -1)+ 1
-            m_3 = 3*(nj1 -1)+ 2 
-            m_4 = 3*( nj2 -1)
-            m_5 = 3*(nj2 -1)+ 1 
-            m_6 = 3*(nj2 -1)+ 2
-        else:
-            n = 3*(nj2 -1)+(row -3)
-            m_1 = 3*( nj1 -1) 
-            m_2 = 3*(nj1 -1)+ 1
-            m_3 = 3*(nj1 -1)+ 2 
-            m_4 = 3*( nj2 -1)
-            m_5 = 3*(nj2 -1)+ 1
-            m_6 = 3*(nj2 -1)+ 2
-            #adderer inn
-            gsm[n][m_1] += k_global[row][0] 
-            gsm[n][m_2] += k_global[row][1]
-            gsm[n][m_3] += k_global[row][2] 
-            gsm[n][m_4] += k_global[row][3]
-            gsm[n][m_5] += k_global[row][4] 
-            gsm[n][m_6] += k_global[row][5]
+
+def trans_k(fi, k_matrise):
+#finner k_g med ta transponert(T) * k_matrise * T
+    T = trans_matrise(fi)
+    k_transformert = np.matmul(np.matmul(np.transpose(T),k_matrise),T)
+    return k_transformert
 
 
 
+def global_stivhetsmatrise(knutepunkter, elementer):
+    antall_kp = len(knutepunkter)
+    gsm = np.zeros((antall_kp * 3, antall_kp * 3))
 
+    # Loop through each element
+    for i in range(len(elementer)):
 
+        # Transform local stiffness matrix to global coordinates (assuming you have a function element_stivhetsmatrise)
 
+        #finner vinkel fi ift. global x-akse
+        dx = knutepunkter[elementer[i][2]][1] - knutepunkter[elementer[i][1]][1]
+        dy = knutepunkter[elementer[i][2]][2] - knutepunkter[elementer[i][1]][2] 
+        fi = np.arctan2(dy, dx)
 
+        
+        k_lokal = element_stivhetsmatrise(elementer[i]) 
+        k_transformert = trans_k(fi, k_lokal)
+        
 
+        element = elementer[i]
+        nj1 = element[1]
+        nj2 = element[2]
 
+        # Loop through rows of local stiffness matrix
+        for row in range(k_transformert.shape[0]):
+            if row < 3:
+                n =   int( 3 * (nj1 - 1) + row)
+                m_1 = int( 3 * (nj1 - 1))
+                m_2 = int( 3 * (nj1 - 1) + 1)
+                m_3 = int( 3 * (nj1 - 1) + 2)
+                m_4 = int( 3 * (nj2 - 1))
+                m_5 = int( 3 * (nj2 - 1) + 1)
+                m_6 = int( 3 * (nj2 - 1) + 2)
 
+            else:
+                n =   int( 3 * (nj2 - 1) + (row - 3))
+                m_1 = int( 3 * (nj1 - 1))
+                m_2 = int( 3 * (nj1 - 1) + 1)
+                m_3 = int( 3 * (nj1 - 1) + 2)
+                m_4 = int( 3 * (nj2 - 1))
+                m_5 = int( 3 * (nj2 - 1) + 1)
+                m_6 = int( 3 * (nj2 - 1) + 2)
 
-
-
-
-
-    # for i in range (len(konnektivitets_matrise)): #tror det blir riktig mengde iterasjoner, lik mengden element
-    # # for i in range (0):
-
-    #     #FEIL: HUSK Å ENDRE
-    #     lokal_stivhetsmatrise = np.array([[4, 2], [2, 4]]) * 1 #ny for hvert nye element. mangler EI/L greiene, må ganges inn for hvert element
-           
-    #     #Legger inn tall fra lokal stivhetsmatrise riktig plass i global stivhetsmatrise
-    #     node1, node2 = konnektivitets_matrise[i]  # Global node indekser for nåværende element
-    
-    #     #Legger inn tall fra lokal stivhetsmatrise riktig plass i global stivhetsmatrise
-
-    #     #Her har jeg bare brukt 2 frihetsgrader, skal ha 6... OBS OBS må endres
-
-    #     gsm[node1, node1] += lokal_stivhetsmatrise[0, 0]
-    #     gsm[node1, node2] += lokal_stivhetsmatrise[0, 1]
-    #     gsm[node2, node1] += lokal_stivhetsmatrise[1, 0]
-    #     gsm[node2, node2] += lokal_stivhetsmatrise[1, 1]
-
-    #     #Uryddig men forståelig variant av det samme:
-    #     # gsm[konnektivitets_matrise[i,0]  ,  konnektivitets_matrise[i,0]] += lokal_stivhetsmatrise[0,0]
-    #     # gsm[konnektivitets_matrise[i,1]  ,  konnektivitets_matrise[i,0]] += lokal_stivhetsmatrise[1,0]
-    #     # gsm[konnektivitets_matrise[i,0]  ,  konnektivitets_matrise[i,1]] += lokal_stivhetsmatrise[0,1]
-    #     # gsm[konnektivitets_matrise[i,1]  ,  konnektivitets_matrise[i,1]] += lokal_stivhetsmatrise[1,1]
-
+            # Add contributions to the global stiffness matrix
+            gsm[n, m_1] += k_transformert[row, 0]
+            gsm[n, m_2] += k_transformert[row, 1]
+            gsm[n, m_3] += k_transformert[row, 2]
+            gsm[n, m_4] += k_transformert[row, 3]
+            gsm[n, m_5] += k_transformert[row, 4]
+            gsm[n, m_6] += k_transformert[row, 5]
 
     return gsm
-
-
-
-
-
-    #Lager en stor liste med matriser av lokale stivhetsmatriser 
-def element_stivhetsmatriser(elementer):
-    element_stivhetsmatriser = np.empty(len(elementer)) #lag en tom array
-    for i in range(len(elementer)):
-        element_stivhetsmatriser[i] = element_stivhetsmatrise(elementer[i])
-    return element_stivhetsmatriser
-
-
-
