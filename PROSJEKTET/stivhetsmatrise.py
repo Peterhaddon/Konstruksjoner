@@ -3,6 +3,8 @@ import numpy as np
 def element_stivhetsmatrise(element):
 
     #Må bestemmes for aktuelt element
+    
+    
     L=1
     E=1
     A=1
