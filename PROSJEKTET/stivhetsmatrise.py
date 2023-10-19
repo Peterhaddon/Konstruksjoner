@@ -3,8 +3,6 @@ import numpy as np
 def element_stivhetsmatrise(element):
 
     #Må bestemmes for aktuelt element
-    
-    
     L=1
     E=1
     A=1
@@ -41,7 +39,99 @@ def element_stivhetsmatrise(element):
 
 
 
-#Lager en stor liste med matriser av lokale stivhetsmatriser 
+
+
+
+
+
+
+
+def global_stivhetsmatrise(konnektivitets_matrise, antall_kp, elementer): #elementdata osv må og inn
+    
+    #lager en tom totalstivhetsmatrise med 3*npunk fordi vi har 3 frihetsgrader
+    gsm = np.zeros((antall_kp*3, antall_kp*3))
+    print(gsm)
+
+    #Husk å transformere til globalt system
+    k_global = element_stivhetsmatrise(elementer[0])
+    # for i in range (0):
+    i=1
+    element = elementer[i]
+    nj1 = element[1]
+    nj2 = element[2]
+    
+    for row in range(6):
+    # Finner nummerering til lokale stivhetselementer i global matrise,vitererer nedover , finner global rad , og tilsvarende plassering av kolonner globalt , for raden
+        if row < 3:
+            n = 3*(nj1 -1)+(row)
+            m_1 = 3*( nj1 -1) 
+            m_2 = 3*(nj1 -1)+ 1
+            m_3 = 3*(nj1 -1)+ 2 
+            m_4 = 3*( nj2 -1)
+            m_5 = 3*(nj2 -1)+ 1 
+            m_6 = 3*(nj2 -1)+ 2
+        else:
+            n = 3*(nj2 -1)+(row -3)
+            m_1 = 3*( nj1 -1) 
+            m_2 = 3*(nj1 -1)+ 1
+            m_3 = 3*(nj1 -1)+ 2 
+            m_4 = 3*( nj2 -1)
+            m_5 = 3*(nj2 -1)+ 1
+            m_6 = 3*(nj2 -1)+ 2
+            #adderer inn
+            gsm[n][m_1] += k_global[row][0] 
+            gsm[n][m_2] += k_global[row][1]
+            gsm[n][m_3] += k_global[row][2] 
+            gsm[n][m_4] += k_global[row][3]
+            gsm[n][m_5] += k_global[row][4] 
+            gsm[n][m_6] += k_global[row][5]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # for i in range (len(konnektivitets_matrise)): #tror det blir riktig mengde iterasjoner, lik mengden element
+    # # for i in range (0):
+
+    #     #FEIL: HUSK Å ENDRE
+    #     lokal_stivhetsmatrise = np.array([[4, 2], [2, 4]]) * 1 #ny for hvert nye element. mangler EI/L greiene, må ganges inn for hvert element
+           
+    #     #Legger inn tall fra lokal stivhetsmatrise riktig plass i global stivhetsmatrise
+    #     node1, node2 = konnektivitets_matrise[i]  # Global node indekser for nåværende element
+    
+    #     #Legger inn tall fra lokal stivhetsmatrise riktig plass i global stivhetsmatrise
+
+    #     #Her har jeg bare brukt 2 frihetsgrader, skal ha 6... OBS OBS må endres
+
+    #     gsm[node1, node1] += lokal_stivhetsmatrise[0, 0]
+    #     gsm[node1, node2] += lokal_stivhetsmatrise[0, 1]
+    #     gsm[node2, node1] += lokal_stivhetsmatrise[1, 0]
+    #     gsm[node2, node2] += lokal_stivhetsmatrise[1, 1]
+
+    #     #Uryddig men forståelig variant av det samme:
+    #     # gsm[konnektivitets_matrise[i,0]  ,  konnektivitets_matrise[i,0]] += lokal_stivhetsmatrise[0,0]
+    #     # gsm[konnektivitets_matrise[i,1]  ,  konnektivitets_matrise[i,0]] += lokal_stivhetsmatrise[1,0]
+    #     # gsm[konnektivitets_matrise[i,0]  ,  konnektivitets_matrise[i,1]] += lokal_stivhetsmatrise[0,1]
+    #     # gsm[konnektivitets_matrise[i,1]  ,  konnektivitets_matrise[i,1]] += lokal_stivhetsmatrise[1,1]
+
+
+    return gsm
+
+
+
+
+
+    #Lager en stor liste med matriser av lokale stivhetsmatriser 
 def element_stivhetsmatriser(elementer):
     element_stivhetsmatriser = np.empty(len(elementer)) #lag en tom array
     for i in range(len(elementer)):
@@ -50,43 +140,3 @@ def element_stivhetsmatriser(elementer):
 
 
 
-
-
-
-
-
-
-
-def global_stivhetsmatrise(konnektivitets_matrise, antall_kp, element_stivhetsmatriser): #elementdata osv må og inn
-    
-    #lager en tom totalstivhetsmatrise med 3*npunk fordi vi har 3 frihetsgrader
-    gsm = np.zeros((antall_kp*3, antall_kp*3))
-    print(gsm)
-
-    for i in range (len(konnektivitets_matrise)): #tror det blir riktig mengde iterasjoner, lik mengden element
-    # for i in range (0):
-
-        #FEIL: HUSK Å ENDRE
-        lokal_stivhetsmatrise = np.array([[4, 2], [2, 4]]) * 1 #ny for hvert nye element. mangler EI/L greiene, må ganges inn for hvert element
-           
-        #Legger inn tall fra lokal stivhetsmatrise riktig plass i global stivhetsmatrise
-        node1, node2 = konnektivitets_matrise[i]  # Global node indekser for nåværende element
-    
-        #Legger inn tall fra lokal stivhetsmatrise riktig plass i global stivhetsmatrise
-
-        #Her har jeg bare brukt 2 frihetsgrader, skal ha 6... OBS OBS må endres
-
-        gsm[node1, node1] += lokal_stivhetsmatrise[0, 0]
-        gsm[node1, node2] += lokal_stivhetsmatrise[0, 1]
-        gsm[node2, node1] += lokal_stivhetsmatrise[1, 0]
-        gsm[node2, node2] += lokal_stivhetsmatrise[1, 1]
-
-        #Uryddig men forståelig variant av det samme:
-        # gsm[konnektivitets_matrise[i,0]  ,  konnektivitets_matrise[i,0]] += lokal_stivhetsmatrise[0,0]
-        # gsm[konnektivitets_matrise[i,1]  ,  konnektivitets_matrise[i,0]] += lokal_stivhetsmatrise[1,0]
-        # gsm[konnektivitets_matrise[i,0]  ,  konnektivitets_matrise[i,1]] += lokal_stivhetsmatrise[0,1]
-        # gsm[konnektivitets_matrise[i,1]  ,  konnektivitets_matrise[i,1]] += lokal_stivhetsmatrise[1,1]
-
-
-    return gsm
-    #får ut noe mystiske verdier, må dobbeltsjekkes
