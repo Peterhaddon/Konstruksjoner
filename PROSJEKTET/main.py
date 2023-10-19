@@ -5,10 +5,10 @@ from scipy.interpolate import CubicSpline
 
 #importerer funksjoner definert i andre filer
 from plot import * #ser ut til å fungere, mangler def_structure
-from readfromfile import readfromfile #bør dobbelsjekkes når vi begynner med the real deal
-from lengder import lengder #Må gjøres, se utdelt kode
+from readfromfile import * #bør dobbelsjekkes når vi begynner med the real deal
+from lengder import * #Må gjøres, se utdelt kode
 from stivhetsmatrise import *
-from I import I #MÅ DOBBELSJEKKES 
+from I import * #MÅ DOBBELSJEKKES 
 
 #TO DO:
  # Diskretisering: få alle kp koordinater, nummerer de, elementnummer. kok?
@@ -19,11 +19,10 @@ from I import I #MÅ DOBBELSJEKKES
 
 
 #bestemmer variabler som er nødvendige for testing av funksjoner:
-file_path = 'PROSJEKTET/Inputfil3.txt'
+file_path = 'PROSJEKTET/Inputfil2.txt'
 knutepunkter, elementer, fordelte_laster, punktlaster = readfromfile(file_path)
 kp_koordinater, elementer_kp_til_kp = format_data(knutepunkter, elementer)
 antall_kp = len(knutepunkter)
-
 
 # TESTING
 
@@ -40,7 +39,7 @@ antall_kp = len(knutepunkter)
 # print(len(fordelte_laster))
 # print(fordelte_laster)
 
-# #rør:
+#rør:
 # print(I(elementer[0])/(10**6))
 # #i-profil:
 # print(I(elementer[4])/(10**6))
@@ -55,5 +54,7 @@ antall_kp = len(knutepunkter)
 
 # print(lengder(knutepunkter, elementer, len(elementer)))
 
-et_element_stivhetsmatrise= element_stivhetsmatrise(elementer[0])
-print(global_stivhetsmatrise(elementer_kp_til_kp, antall_kp,et_element_stivhetsmatrise))
+et_element_stivhetsmatrise = element_stivhetsmatrise(elementer[0])
+# print(global_stivhetsmatrise(elementer_kp_til_kp, antall_kp,et_element_stivhetsmatrise))
+
+print(et_element_stivhetsmatrise)
