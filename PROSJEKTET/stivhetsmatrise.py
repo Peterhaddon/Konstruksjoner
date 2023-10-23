@@ -41,13 +41,13 @@ def trans_matrise(fi):
     sin_fi = np.sin(fi)
     
     T = np.array([
-        [cos_fi, sin_fi, 0, 0, 0, 0],
-        [-sin_fi, cos_fi,  0, 0, 0, 0],
+        [cos_fi, -sin_fi, 0, 0, 0, 0],
+        [sin_fi, cos_fi,  0, 0, 0, 0],
         [0,      0,       1, 0, 0, 0],
-        [0,      0,       0, cos_fi, sin_fi, 0],
-        [0,      0,       0, -sin_fi, cos_fi,  0],
+        [0,      0,       0, cos_fi, -sin_fi, 0],
+        [0,      0,       0, sin_fi, cos_fi,  0],
         [0,      0,       0, 0,      0,       1]
-    ]) #ER DENNE RIKTIG? KOKEN HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
+    ]) #ER DENNE RIKTIG? BOKA HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
     return T
 
 
