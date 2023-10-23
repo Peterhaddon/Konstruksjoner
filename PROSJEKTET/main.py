@@ -55,4 +55,7 @@ antall_kp = len(knutepunkter)
 
 # print(lengder(knutepunkter, elementer, len(elementer)))
 
-print(np.round(global_stivhetsmatrise(knutepunkter, elementer),1))
+# print(np.round(global_stivhetsmatrise(knutepunkter, elementer),1))
+# print(np.round(trans_matrise(np.pi/2),1))
+# print(trans_k(0,element_stivhetsmatrise(elementer[0])))
+
