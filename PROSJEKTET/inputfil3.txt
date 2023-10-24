@@ -8,19 +8,20 @@
 
 #KP-info i rekkefølge:
 #Knutepunktsnummer, x-koordinat [m], y-koordinat [m], Hvordan det er innspent(0 for fri, 1 for fast innspent)
-0, 0, 1, 1
-1, 1, 2, 0
-2, 2, 3, 1
-3, 2, 4, 0
+0, 0, 0, 1
+1, 0, 1, 0
+2, 1, 1, 1
+3, 2, 0, 0
+
 
 
 
 #Element-info i rekkefølge:
 #Element nummer, Knutepunkt 1, Knutepunkt 2, E-modul [Gpa], Geometri (c for rør, b for box, i for i-profil), Dimensjonene til profilene [mm]. I profil hhv: hs, ts, bf, tf
 0, 0, 1, 1, c, 1000, 10
-1, 1, 2, 0, c, 1000, 10
+1, 1, 2, 1, c, 1000, 10
 2, 2, 3, 1, c, 1000, 10
-3, 2, 3, 0, c, 1000, 10
+3, 3, 0, 1, c, 1000, 10
 
 
 #Antall fordelte laster:

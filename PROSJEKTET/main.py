@@ -4,19 +4,13 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import CubicSpline
 
 #importerer funksjoner definert i andre filer
-from plot import * #ser ut til å fungere, mangler def_structure
-from readfromfile import * #bør dobbelsjekkes når vi begynner med the real deal
-from lengder1 import * #Må gjøres, se utdelt kode
-
+from plot import * #ser ut til å fungere, men mangler def_structure
+from readfromfile import * 
 from stivhetsmatrise import *
-from I import * #MÅ DOBBELSJEKKES
-from lengder2 import *
+from elementfunksjoner import *
+from lastvektor import *
 
 #TO DO:
-
- # lengder-funksjon
- # Areal-funksjon
- # sjekk I funksjon opp mot kjente tverrsnitt
 
  # Dobbelsjekk at ALT(!) i stivhetsmatrise er riktig
 
@@ -26,8 +20,9 @@ file_path = 'PROSJEKTET/Inputfil3.txt'
 knutepunkter, elementer, fordelte_laster, punktlaster = readfromfile(file_path)
 kp_koordinater, elementer_kp_til_kp = format_data(knutepunkter, elementer)
 antall_kp = len(knutepunkter)
+elementlengder = lengder(knutepunkter,elementer)
 
-# TESTING
+# __TESTING__
 
 # print('\nknutepunkter')
 # print(len(knutepunkter))
@@ -49,14 +44,16 @@ antall_kp = len(knutepunkter)
 # #box:
 # print(I(elementer[2])/(10**6))
 
-numbers = 1
-first_index = 0
-fig_init, ax_init, fig_def, ax_def = setup_plots()
-plot_structure(ax_init, kp_koordinater, elementer_kp_til_kp, numbers, first_index)
-plt.show()
+# numbers = 1
+# first_index = 0
+# fig_init, ax_init, fig_def, ax_def = setup_plots()
+# plot_structure(ax_init, kp_koordinater, elementer_kp_til_kp, numbers, first_index)
+# plt.show()
 
-print(lengder2(knutepunkter, elementer, len(elementer)))
+# print(lengder(knutepunkter, elementer, len(elementer)))
 
 # print(np.round(global_stivhetsmatrise(knutepunkter, elementer),1))
 # print(np.round(trans_matrise(np.pi/2),1))
 # print(trans_k(0,element_stivhetsmatrise(elementer[0])))
+
+# print(element_stivhetsmatrise(elementer[0],elementlengder))

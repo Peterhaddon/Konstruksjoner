@@ -1,16 +1,15 @@
 import numpy as np
+from elementfunksjoner import *
 
-def element_stivhetsmatrise(element):
+def element_stivhetsmatrise(element, lengder):
 
-    #Må bestemmes for aktuelt element!
-
-    L=1
-    E=1
-    A=1
-    Iy=1
+    #Definerer verdier for det aktuelle elementet
+    L=lengder[element[0]] 
+    E=element[3]
+    A=areal(element)
+    Iy=I(element)
 
     #setter opp tim 6x6 matrise, og adderer inn stivheter 
-
     k_lokal_matrise = np.zeros((6, 6)) 
     k_lokal_matrise [0][0] += E*A/L
     k_lokal_matrise [3][3] += E*A/L 
@@ -41,18 +40,24 @@ def trans_matrise(fi):
     sin_fi = np.sin(fi)
     
     T = np.array([
-        [cos_fi, -sin_fi, 0, 0, 0, 0],
-        [sin_fi, cos_fi,  0, 0, 0, 0],
+        [cos_fi, sin_fi, 0, 0, 0, 0],
+        [-sin_fi, cos_fi,  0, 0, 0, 0],
         [0,      0,       1, 0, 0, 0],
-        [0,      0,       0, cos_fi, -sin_fi, 0],
-        [0,      0,       0, sin_fi, cos_fi,  0],
+        [0,      0,       0, cos_fi, sin_fi, 0],
+        [0,      0,       0, -sin_fi, cos_fi,  0],
         [0,      0,       0, 0,      0,       1]
-    ]) #ER DENNE RIKTIG? BOKA HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
+    ]) #ER DENNE RIKTIG? BOKA/koken HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
+    #ER DENNE RIKTIG? BOKA HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
+    #ER DENNE RIKTIG? BOKA HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
+    #ER DENNE RIKTIG? BOKA HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
+    #ER DENNE RIKTIG? BOKA HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
+    #ER DENNE RIKTIG? BOKA HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
     return T
 
 
 def trans_k(fi, k_matrise):
-#finner k_g med ta transponert(T) * k_matrise * T
+    
+    # Finner k_g med ta transponert(T) x k_matrise x T
     T = trans_matrise(fi)
     k_transformert = np.matmul(np.matmul(np.transpose(T),k_matrise),T)
     return k_transformert
@@ -63,26 +68,24 @@ def global_stivhetsmatrise(knutepunkter, elementer):
     antall_kp = len(knutepunkter)
     gsm = np.zeros((antall_kp * 3, antall_kp * 3))
 
-    # Loop through each element
+    # Går gjennom hvert element
     for i in range(len(elementer)):
 
-        # Transform local stiffness matrix to global coordinates (assuming you have a function element_stivhetsmatrise)
-
-        #finner vinkel fi ift. global x-akse
+        # Finner vinkel fi ift. global x-akse
         dx = knutepunkter[elementer[i][2]][1] - knutepunkter[elementer[i][1]][1]
         dy = knutepunkter[elementer[i][2]][2] - knutepunkter[elementer[i][1]][2] 
         fi = np.arctan2(dy, dx)
 
-        
+        # Bestemmer, så transformerer lokal stivhetsmatrise til globale koordinater
         k_lokal = element_stivhetsmatrise(elementer[i]) 
         k_transformert = trans_k(fi, k_lokal)
         
-
+        # Finner aktuelle knutepunktene
         element = elementer[i]
         nj1 = element[1]
         nj2 = element[2]
 
-        # Loop through rows of local stiffness matrix
+        # Går igjennom radene til den lokale stivhetsmatrisen
         for row in range(k_transformert.shape[0]):
             if row < 3:
                 n =   int( 3 * (nj1 - 1) + row)
@@ -102,7 +105,7 @@ def global_stivhetsmatrise(knutepunkter, elementer):
                 m_5 = int( 3 * (nj2 - 1) + 1)
                 m_6 = int( 3 * (nj2 - 1) + 2)
 
-            # Add contributions to the global stiffness matrix
+            # Legger til bidraget i global stivhetsmatrise 
             gsm[n, m_1] += k_transformert[row, 0]
             gsm[n, m_2] += k_transformert[row, 1]
             gsm[n, m_3] += k_transformert[row, 2]

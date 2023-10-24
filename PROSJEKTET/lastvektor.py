@@ -1,3 +1,4 @@
+
 def fim_fordeltlast():
 
     q1 = q2 = l = 1
