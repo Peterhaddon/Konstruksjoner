@@ -61,3 +61,5 @@ antall_kp = len(knutepunkter)
 # print(trans_k(0,element_stivhetsmatrise(elementer[0])))
 
 # hei
+
+#hei
