@@ -1,5 +1,6 @@
+import numpy as np
 
-def lengder(knutepunkt, element, nelem):
+def lengder1(knutepunkt, element, nelem):
 
     #Tror denne skal lage en liste med lengden av alle element i samme rekkefølge som 'elementer'
     #Nedenfor er det vi har fått utdelt fra 'https://www.ntnu.no/wiki/display/imtsoftware/Prosjektoppgave+i+TMR4167+Marin+teknikk+-+Konstruksjoner#ProsjektoppgaveiTMR4167MarinteknikkKonstruksjoner-Utdeltefunksjoner'
