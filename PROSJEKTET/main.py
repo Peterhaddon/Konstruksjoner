@@ -8,7 +8,8 @@ from plot import * #ser ut til å fungere, mangler def_structure
 from readfromfile import * #bør dobbelsjekkes når vi begynner med the real deal
 from lengder import * #Må gjøres, se utdelt kode
 from stivhetsmatrise import *
-from I import * #MÅ DOBBELSJEKKES 
+from I import * #MÅ DOBBELSJEKKES
+from lengder import *
 
 #TO DO:
 
