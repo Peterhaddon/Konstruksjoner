@@ -64,7 +64,7 @@ def trans_k(fi, k_matrise):
 
 
 
-def global_stivhetsmatrise(knutepunkter, elementer):
+def global_stivhetsmatrise(knutepunkter, elementer, lengder):
     antall_kp = len(knutepunkter)
     gsm = np.zeros((antall_kp * 3, antall_kp * 3))
 
@@ -77,7 +77,7 @@ def global_stivhetsmatrise(knutepunkter, elementer):
         fi = np.arctan2(dy, dx)
 
         # Bestemmer, så transformerer lokal stivhetsmatrise til globale koordinater
-        k_lokal = element_stivhetsmatrise(elementer[i]) 
+        k_lokal = element_stivhetsmatrise(elementer[i], lengder) 
         k_transformert = trans_k(fi, k_lokal)
         
         # Finner aktuelle knutepunktene
@@ -135,8 +135,56 @@ def lokal_lastvektor(element):
 
 def trans_lokal_lastvektor(fi, lokal_lastvektor):
     
-    # Finner lastvektor i globalt system med ta transponert(T) x k_matrise x T
+    # Finner lastvektor i globalt system med ta T x k_matrise
     T = trans_matrise(fi)
     lastvektor_transformert = np.matmul(T,lokal_lastvektor)
     return lastvektor_transformert
 
+
+def global_lastvektor(knutepunkter, elementer):
+    antall_kp = len(knutepunkter)
+    glv = np.zeros((antall_kp * 3)) #global lastvektor
+    glv = np.transpose(glv) # trengs denne?
+
+    # Går gjennom hvert element
+    for i in range(len(elementer)):
+
+        # Finner vinkel fi ift. global x-akse
+        dx = knutepunkter[elementer[i][2]][1] - knutepunkter[elementer[i][1]][1]
+        dy = knutepunkter[elementer[i][2]][2] - knutepunkter[elementer[i][1]][2] 
+        fi = np.arctan2(dy, dx)
+
+        # Bestemmer, så transformerer lokal lastvektor til globale koordinater
+        lastvektor_lokal = lokal_lastvektor(elementer[i]) 
+        lastvektor_transformert = trans_lokal_lastvektor(fi, lastvektor_lokal)
+        
+        # Finner aktuelle knutepunktene
+        element = elementer[i]
+        nj1 = element[1]
+        nj2 = element[2]
+
+        # Går igjennom radene til den lokale lastvektoren
+        m_1 = int( 3 * (nj1))
+        m_2 = int( 3 * (nj1) + 1)
+        m_3 = int( 3 * (nj1) + 2)
+        m_4 = int( 3 * (nj2))
+        m_5 = int( 3 * (nj2) + 1)
+        m_6 = int( 3 * (nj2) + 2)
+
+        # Legger til bidraget i global lastvektor 
+        glv[m_1] += lastvektor_transformert[0]
+        glv[m_2] += lastvektor_transformert[1]
+        glv[m_3] += lastvektor_transformert[2]
+        glv[m_4] += lastvektor_transformert[3]
+        glv[m_5] += lastvektor_transformert[4]
+        glv[m_6] += lastvektor_transformert[5]
+
+
+    return glv
+
+
+def løs_deformasjoner(gsm, glv):
+
+    def_vec = np.matmul(np.linalg.inv(gsm),np.transpose(glv))
+
+    return(def_vec)

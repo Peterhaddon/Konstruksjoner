@@ -8,7 +8,7 @@ from plot import * #ser ut til å fungere, men mangler def_structure
 from readfromfile import * 
 from stivhetsmatrise import *
 from elementfunksjoner import *
-from lastvektor import *
+from stivhetsmatrise import *
 
 #TO DO:
 
@@ -58,4 +58,10 @@ elementlengder = lengder(knutepunkter,elementer)
 
 # print(element_stivhetsmatrise(elementer[0],elementlengder))
 
-print(lokal_lastvektor(elementer[1]))
+# print(lokal_lastvektor(elementer[0]))
+# print(np.round(trans_lokal_lastvektor((np.pi/2),lokal_lastvektor(elementer[0])),1))
+# print(global_lastvektor(knutepunkter,elementer))
+
+gsm = global_stivhetsmatrise(knutepunkter, elementer, elementlengder)
+glv = global_lastvektor(knutepunkter, elementer)
+print(løs_deformasjoner(gsm, glv))
