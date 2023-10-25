@@ -114,3 +114,29 @@ def global_stivhetsmatrise(knutepunkter, elementer):
             gsm[n, m_6] += k_transformert[row, 5]
 
     return gsm
+
+
+
+
+def lokal_lastvektor(element):
+
+    q1 = q2 = l = 1
+
+    # deler opp lasten i to trekantlaster
+    fim_ende1 = (-1/20) * (q1*l**2) + (-1/30) * (q2*l**2)
+    fim_ende2 = ( 1/20) * (q1*l**2) + ( 1/30) * (q2*l**2)
+    q_ende1 = 1
+    q_ende2 = 1
+
+    lastvec = np.array([[0], [q_ende1], [fim_ende1], [0], [q_ende1], [fim_ende1]])
+
+    return(lastvec)
+
+
+def trans_lokal_lastvektor(fi, lokal_lastvektor):
+    
+    # Finner lastvektor i globalt system med ta transponert(T) x k_matrise x T
+    T = trans_matrise(fi)
+    lastvektor_transformert = np.matmul(T,lokal_lastvektor)
+    return lastvektor_transformert
+

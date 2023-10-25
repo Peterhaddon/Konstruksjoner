@@ -57,3 +57,5 @@ elementlengder = lengder(knutepunkter,elementer)
 # print(trans_k(0,element_stivhetsmatrise(elementer[0])))
 
 # print(element_stivhetsmatrise(elementer[0],elementlengder))
+
+print(lokal_lastvektor(elementer[1]))
