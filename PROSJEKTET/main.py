@@ -6,17 +6,16 @@ from scipy.interpolate import CubicSpline
 #importerer funksjoner definert i andre filer
 from plot import * #ser ut til å fungere, men mangler def_structure
 from readfromfile import * 
-from stivhetsmatrise import *
 from elementfunksjoner import *
-from stivhetsmatrise import *
+from matriseoperasjoner import *
 
 #TO DO:
 
- # Dobbelsjekk at ALT(!) i stivhetsmatrise er riktig
+ # Dobbelsjekk at ALT(!) i matriseoperasjoner.py er riktig
 
 
 #bestemmer variabler som er nødvendige for testing av funksjoner:
-file_path = 'PROSJEKTET/Inputfil2.txt'
+file_path = 'PROSJEKTET/Inputfil.txt'
 knutepunkter, elementer, fordelte_laster, punktlaster = readfromfile(file_path)
 kp_koordinater, elementer_kp_til_kp = format_data(knutepunkter, elementer)
 antall_kp = len(knutepunkter)
@@ -66,4 +65,9 @@ elementlengder = lengder(knutepunkter,elementer)
 # glv = global_lastvektor(knutepunkter, elementer)
 # print(løs_deformasjoner(gsm, glv))
 
-print(fordelte_laster)
+ll=lokal_lastvektor(elementlengder, elementer[8], fordelte_laster)
+print(ll)
+
+print(punktlaster)
+
+print(punktlaster_vec(elementlengder, elementer, punktlaster))

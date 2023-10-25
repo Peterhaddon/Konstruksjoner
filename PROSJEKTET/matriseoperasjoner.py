@@ -40,11 +40,11 @@ def trans_matrise(fi):
     sin_fi = np.sin(fi)
     
     T = np.array([
-        [cos_fi, sin_fi, 0, 0, 0, 0],
-        [-sin_fi, cos_fi,  0, 0, 0, 0],
+        [cos_fi, -sin_fi, 0, 0, 0, 0],
+        [sin_fi, cos_fi,  0, 0, 0, 0],
         [0,      0,       1, 0, 0, 0],
-        [0,      0,       0, cos_fi, sin_fi, 0],
-        [0,      0,       0, -sin_fi, cos_fi,  0],
+        [0,      0,       0, cos_fi, -sin_fi, 0],
+        [0,      0,       0, sin_fi, cos_fi,  0],
         [0,      0,       0, 0,      0,       1]
     ]) #ER DENNE RIKTIG? BOKA/koken HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
     #ER DENNE RIKTIG? BOKA HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
@@ -118,25 +118,29 @@ def global_stivhetsmatrise(knutepunkter, elementer, lengder):
 
 
 
-def lokal_lastvektor(knutepunkter, elementer, fordelte_laster):
+def lokal_lastvektor(elementlengder, element, fordelte_laster):
 
-    fordelte_laster[]
-    q1 = 0
-    q2 = 1
-    l = 1
+    element_index = element[0]
+    for i in range (len(fordelte_laster)):
+        if fordelte_laster[i][1] == element_index:
+            q1 = fordelte_laster[i][2]
+            q2 = fordelte_laster[i][3]
+            l = float(elementlengder[element_index])
 
-    # deler opp lasten i to trekantlaster
-    fim_ende1 = (-1/20) * (q1*l**2) + (-1/30) * (q2*l**2)
-    fim_ende2 = ( 1/30) * (q1*l**2) + ( 1/20) * (q2*l**2)
+            # deler opp lasten i to trekantlaster
+            fim_ende1 = (-1/20) * (q1*l**2) + (-1/30) * (q2*l**2)
+            fim_ende2 = ( 1/30) * (q1*l**2) + ( 1/20) * (q2*l**2)
 
-    #fastinnspenningskrefter ved likevekt
-    fis_ende2 = (fim_ende1 + fim_ende2 + (1/2 * q1 * l * 1/3 * l) + (1/2 * q2 * l * 2/3 * l))/(l)
-    fis_ende1 = (1/2 * q1 * l) + (1/2 * q2 * l) - fis_ende2
-    
-    #legger fastinnspenningskrefter- og momenter i riktig rekkefølge
-    lastvec = np.array([[0], [fis_ende1], [fim_ende1], [0], [fis_ende2], [fim_ende2]])
-
+            #fastinnspenningskrefter ved likevekt
+            fis_ende2 = (fim_ende1 + fim_ende2 + (1/2 * q1 * l * 1/3 * l) + (1/2 * q2 * l * 2/3 * l))/(l)
+            fis_ende1 = (1/2 * q1 * l) + (1/2 * q2 * l) - fis_ende2
+            
+            #legger fastinnspenningskrefter- og momenter i riktig rekkefølge
+            lastvec = np.array([[0], [fis_ende1], [fim_ende1], [0], [fis_ende2], [fim_ende2]])
+  
     return(lastvec)
+
+
 
 
 def trans_lokal_lastvektor(fi, lokal_lastvektor):
@@ -185,12 +189,43 @@ def global_lastvektor(knutepunkter, elementer):
         glv[m_5] += lastvektor_transformert[4]
         glv[m_6] += lastvektor_transformert[5]
 
-
+    #glv += punktlaster_vec
+    #
+    #
+    #
     return glv
 
 
-def løs_deformasjoner(gsm, glv):
+def løs_deformasjoner(gsm, glv): #Løser likningssystemet fra global stivhetsmatrise og global lastvektor,
+                                 #svaret vi får ut er deformasjonsvektoren 
 
     def_vec = np.matmul(np.linalg.inv(gsm),np.transpose(glv))
 
     return(def_vec)
+
+
+
+def punktlaster_vec(elementlengder, elementer, punktlaster):
+
+
+#Må gjøres:
+
+    element_index = elementer[0]
+    for i in range (len(punktlaster)):
+        if punktlaster[i][1] == element_index:
+            q1 = punktlaster[i][2]
+            q2 = punktlaster[i][3]
+            l = float(elementlengder[element_index])
+
+            # deler opp lasten i to trekantlaster
+            fim_ende1 = (-1/20) * (q1*l**2) + (-1/30) * (q2*l**2)
+            fim_ende2 = ( 1/30) * (q1*l**2) + ( 1/20) * (q2*l**2)
+
+            #fastinnspenningskrefter ved likevekt
+            fis_ende2 = (fim_ende1 + fim_ende2 + (1/2 * q1 * l * 1/3 * l) + (1/2 * q2 * l * 2/3 * l))/(l)
+            fis_ende1 = (1/2 * q1 * l) + (1/2 * q2 * l) - fis_ende2
+            
+            #legger fastinnspenningskrefter- og momenter i riktig rekkefølge
+            lastvec = np.array([[0], [fis_ende1], [fim_ende1], [0], [fis_ende2], [fim_ende2]])
+  
+    return(lastvec)
