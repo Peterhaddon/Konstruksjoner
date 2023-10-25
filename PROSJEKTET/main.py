@@ -16,7 +16,7 @@ from stivhetsmatrise import *
 
 
 #bestemmer variabler som er nødvendige for testing av funksjoner:
-file_path = 'PROSJEKTET/Inputfil3.txt'
+file_path = 'PROSJEKTET/Inputfil2.txt'
 knutepunkter, elementer, fordelte_laster, punktlaster = readfromfile(file_path)
 kp_koordinater, elementer_kp_til_kp = format_data(knutepunkter, elementer)
 antall_kp = len(knutepunkter)
@@ -62,6 +62,8 @@ elementlengder = lengder(knutepunkter,elementer)
 # print(np.round(trans_lokal_lastvektor((np.pi/2),lokal_lastvektor(elementer[0])),1))
 # print(global_lastvektor(knutepunkter,elementer))
 
-gsm = global_stivhetsmatrise(knutepunkter, elementer, elementlengder)
-glv = global_lastvektor(knutepunkter, elementer)
-print(løs_deformasjoner(gsm, glv))
+# gsm = global_stivhetsmatrise(knutepunkter, elementer, elementlengder)
+# glv = global_lastvektor(knutepunkter, elementer)
+# print(løs_deformasjoner(gsm, glv))
+
+print(fordelte_laster)

@@ -118,8 +118,9 @@ def global_stivhetsmatrise(knutepunkter, elementer, lengder):
 
 
 
-def lokal_lastvektor(element):
+def lokal_lastvektor(knutepunkter, elementer, fordelte_laster):
 
+    fordelte_laster[]
     q1 = 0
     q2 = 1
     l = 1
