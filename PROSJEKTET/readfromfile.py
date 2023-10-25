@@ -64,7 +64,7 @@ def readfromfile(file_path):
                         i += 1  
                         data = lines[i].strip().split(', ')
                         if len(data) == 4: #Sjekker at det er formattert riktig
-                            punktlaster_info = [float(value) if value.replace('.', '', 1).isdigit() else value for value in data]
+                            punktlaster_info = [int(value) if value.replace('.', '', 1).isdigit() else value for value in data]
                             punktlaster.append(punktlaster_info) #Fyller lista med data fra inputfil
 
             else:

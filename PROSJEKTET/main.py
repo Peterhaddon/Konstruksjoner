@@ -62,12 +62,12 @@ elementlengder = lengder(knutepunkter,elementer)
 # print(global_lastvektor(knutepunkter,elementer))
 
 # gsm = global_stivhetsmatrise(knutepunkter, elementer, elementlengder)
-# glv = global_lastvektor(knutepunkter, elementer)
+# glv = global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, punktlaster)
 # print(løs_deformasjoner(gsm, glv))
 
-ll=lokal_lastvektor(elementlengder, elementer[8], fordelte_laster)
-print(ll)
+# ll=lokal_lastvektor(elementlengder, elementer[8], fordelte_laster)
+# print(ll)
 
-print(punktlaster)
+# print(punktlaster)
 
-print(punktlaster_vec(elementlengder, elementer, punktlaster))
+print(punktlaster_vec(knutepunkter, punktlaster))

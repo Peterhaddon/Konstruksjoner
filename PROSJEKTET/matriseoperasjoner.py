@@ -121,7 +121,9 @@ def global_stivhetsmatrise(knutepunkter, elementer, lengder):
 def lokal_lastvektor(elementlengder, element, fordelte_laster):
 
     element_index = element[0]
-    for i in range (len(fordelte_laster)):
+    lastvec = np.zeros(6)
+    for i in range (len(fordelte_laster)): #sjekker om det aktuelle elementet har en fordelt last
+
         if fordelte_laster[i][1] == element_index:
             q1 = fordelte_laster[i][2]
             q2 = fordelte_laster[i][3]
@@ -151,7 +153,7 @@ def trans_lokal_lastvektor(fi, lokal_lastvektor):
     return lastvektor_transformert
 
 
-def global_lastvektor(knutepunkter, elementer):
+def global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, punktlaster):
     antall_kp = len(knutepunkter)
     glv = np.zeros((antall_kp * 3)) #global lastvektor
     glv = np.transpose(glv) # trengs denne?
@@ -165,7 +167,7 @@ def global_lastvektor(knutepunkter, elementer):
         fi = np.arctan2(dy, dx)
 
         # Bestemmer, så transformerer lokal lastvektor til globale koordinater
-        lastvektor_lokal = lokal_lastvektor(elementer[i]) 
+        lastvektor_lokal = lokal_lastvektor(elementlengder, elementer[i], fordelte_laster ) 
         lastvektor_transformert = trans_lokal_lastvektor(fi, lastvektor_lokal)
         
         # Finner aktuelle knutepunktene
@@ -189,10 +191,8 @@ def global_lastvektor(knutepunkter, elementer):
         glv[m_5] += lastvektor_transformert[4]
         glv[m_6] += lastvektor_transformert[5]
 
-    #glv += punktlaster_vec
-    #
-    #
-    #
+    glv += punktlaster_vec(knutepunkter, punktlaster) #legger til bidrag fra punktlaster
+   
     return glv
 
 
@@ -205,27 +205,42 @@ def løs_deformasjoner(gsm, glv): #Løser likningssystemet fra global stivhetsma
 
 
 
-def punktlaster_vec(elementlengder, elementer, punktlaster):
+def punktlaster_vec(knutepunkter, punktlaster): #Punktlaster kan kun tas opp i knutepunkt
+                                                #Disse legges så direkte inn i den globale lastvektoren
+    antall_kp = len(knutepunkter)
+    plastvec = np.zeros((antall_kp * 3)) #global lastvektor for punktlaster
+
+    for i in range (len(punktlaster)): #henter ut info for punktlastene
+
+        knutepunkt = punktlaster[i][1]
+        retning = punktlaster[i][2]
+        lastintensitet = punktlaster[i][3]
+
+# MÅ ENDRES
+# MÅ ENDRES
+# MÅ ENDRES
+# MÅ ENDRES
+# MÅ ENDRES
 
 
-#Må gjøres:
+        x_komp = 0
+        y_komp = -lastintensitet
 
-    element_index = elementer[0]
-    for i in range (len(punktlaster)):
-        if punktlaster[i][1] == element_index:
-            q1 = punktlaster[i][2]
-            q2 = punktlaster[i][3]
-            l = float(elementlengder[element_index])
+# MÅ ENDRES
+# MÅ ENDRES
+# MÅ ENDRES
+# MÅ ENDRES
+# MÅ ENDRES
+# MÅ ENDRES, alle punktlaster funker nå kun nedover! Må bruke retning til noe fornuftig, dekomponere til x og y komponenter...
 
-            # deler opp lasten i to trekantlaster
-            fim_ende1 = (-1/20) * (q1*l**2) + (-1/30) * (q2*l**2)
-            fim_ende2 = ( 1/30) * (q1*l**2) + ( 1/20) * (q2*l**2)
 
-            #fastinnspenningskrefter ved likevekt
-            fis_ende2 = (fim_ende1 + fim_ende2 + (1/2 * q1 * l * 1/3 * l) + (1/2 * q2 * l * 2/3 * l))/(l)
-            fis_ende1 = (1/2 * q1 * l) + (1/2 * q2 * l) - fis_ende2
-            
-            #legger fastinnspenningskrefter- og momenter i riktig rekkefølge
-            lastvec = np.array([[0], [fis_ende1], [fim_ende1], [0], [fis_ende2], [fim_ende2]])
-  
-    return(lastvec)
+        x_komp_index = int( 3 * (knutepunkt))
+        y_komp_index = int( 3 * (knutepunkt) + 1)
+
+        #innadderer lastintensiteten riktig plass i punktlastvektor
+        plastvec[x_komp_index] += x_komp 
+        plastvec[y_komp_index] += y_komp
+        
+
+
+    return(plastvec)
