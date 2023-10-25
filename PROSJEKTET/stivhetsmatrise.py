@@ -120,15 +120,20 @@ def global_stivhetsmatrise(knutepunkter, elementer):
 
 def lokal_lastvektor(element):
 
-    q1 = q2 = l = 1
+    q1 = 0
+    q2 = 1
+    l = 1
 
     # deler opp lasten i to trekantlaster
     fim_ende1 = (-1/20) * (q1*l**2) + (-1/30) * (q2*l**2)
-    fim_ende2 = ( 1/20) * (q1*l**2) + ( 1/30) * (q2*l**2)
-    q_ende1 = 1
-    q_ende2 = 1
+    fim_ende2 = ( 1/30) * (q1*l**2) + ( 1/20) * (q2*l**2)
 
-    lastvec = np.array([[0], [q_ende1], [fim_ende1], [0], [q_ende1], [fim_ende1]])
+    #fastinnspenningskrefter ved likevekt
+    fis_ende2 = (fim_ende1 + fim_ende2 + (1/2 * q1 * l * 1/3 * l) + (1/2 * q2 * l * 2/3 * l))/(l)
+    fis_ende1 = (1/2 * q1 * l) + (1/2 * q2 * l) - fis_ende2
+    
+    #legger fastinnspenningskrefter- og momenter i riktig rekkefølge
+    lastvec = np.array([[0], [fis_ende1], [fim_ende1], [0], [fis_ende2], [fim_ende2]])
 
     return(lastvec)
 

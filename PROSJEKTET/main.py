@@ -8,7 +8,7 @@ from plot import * #ser ut til å fungere, men mangler def_structure
 from readfromfile import * 
 from stivhetsmatrise import *
 from elementfunksjoner import *
-from lastvektor import *
+from stivhetsmatrise import *
 
 #TO DO:
 
