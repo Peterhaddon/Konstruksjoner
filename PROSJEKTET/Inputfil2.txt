@@ -45,7 +45,7 @@ q, 16, 15000, 48000
 
 #Info om punktlastene i rekkefølge:
 #Type last, Hvilket knutepunkt det virker pÃ¥, Hvilken retning det virker i (i forhold til globalt aksesystem), Intensitet [N]
-pk, 12, 270, 4000 
-pk, 11, 270, 55000
-pk, 13, 270, 45000
+pk, 2, 270, 4000 
+pk, 1, 270, 55000
+pk, 0, 270, 45000
 

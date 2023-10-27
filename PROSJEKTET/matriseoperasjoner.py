@@ -191,7 +191,7 @@ def global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, 
         glv[m_5] += lastvektor_transformert[4]
         glv[m_6] += lastvektor_transformert[5]
 
-    glv += punktlaster_vec(knutepunkter, punktlaster) #legger til bidrag fra punktlaster
+    glv -= punktlaster_vec(knutepunkter, punktlaster) #legger til bidrag fra punktlaster, med negativt fortegn?!
    
     return glv
 
@@ -244,3 +244,13 @@ def punktlaster_vec(knutepunkter, punktlaster): #Punktlaster kan kun tas opp i k
 
 
     return(plastvec)
+
+
+def lokale_deformasjoner():
+
+    return()
+
+
+def lokale_endekrefter():
+    
+    return()
