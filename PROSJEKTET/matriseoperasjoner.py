@@ -9,6 +9,8 @@ def element_stivhetsmatrise(element, lengder):
     A=areal(element)
     Iy=I(element)
 
+    # L=E=A=Iy=1
+
     #setter opp tim 6x6 matrise, og adderer inn stivheter 
     k_lokal_matrise = np.zeros((6, 6)) 
     k_lokal_matrise [0][0] += E*A/L
@@ -33,6 +35,7 @@ def element_stivhetsmatrise(element, lengder):
     k_lokal_matrise [2][5] += 2*E*Iy/L
 
     return k_lokal_matrise
+
 
 def trans_matrise(fi):
 
@@ -63,7 +66,6 @@ def trans_k(fi, k_matrise):
     return k_transformert
 
 
-
 def global_stivhetsmatrise(knutepunkter, elementer, lengder):
     antall_kp = len(knutepunkter)
     gsm = np.zeros((antall_kp * 3, antall_kp * 3))
@@ -82,40 +84,38 @@ def global_stivhetsmatrise(knutepunkter, elementer, lengder):
         
         # Finner aktuelle knutepunktene
         element = elementer[i]
-        nj1 = element[1]
-        nj2 = element[2]
+        node1 = element[1]
+        node2 = element[2]
 
-        # Går igjennom radene til den lokale stivhetsmatrisen
-        for row in range(k_transformert.shape[0]):
-            if row < 3:
-                n =   int( 3 * (nj1 - 1) + row)
-                m_1 = int( 3 * (nj1 - 1))
-                m_2 = int( 3 * (nj1 - 1) + 1)
-                m_3 = int( 3 * (nj1 - 1) + 2)
-                m_4 = int( 3 * (nj2 - 1))
-                m_5 = int( 3 * (nj2 - 1) + 1)
-                m_6 = int( 3 * (nj2 - 1) + 2)
-
-            else:
-                n =   int( 3 * (nj2 - 1) + (row - 3))
-                m_1 = int( 3 * (nj1 - 1))
-                m_2 = int( 3 * (nj1 - 1) + 1)
-                m_3 = int( 3 * (nj1 - 1) + 2)
-                m_4 = int( 3 * (nj2 - 1))
-                m_5 = int( 3 * (nj2 - 1) + 1)
-                m_6 = int( 3 * (nj2 - 1) + 2)
-
-            # Legger til bidraget i global stivhetsmatrise 
-            gsm[n, m_1] += k_transformert[row, 0]
-            gsm[n, m_2] += k_transformert[row, 1]
-            gsm[n, m_3] += k_transformert[row, 2]
-            gsm[n, m_4] += k_transformert[row, 3]
-            gsm[n, m_5] += k_transformert[row, 4]
-            gsm[n, m_6] += k_transformert[row, 5]
+        for j in range(3):
+            for k in range(3):
+                gsm[node1*3 + j, node1*3 + k] += k_lokal[j ][k]
+                gsm[node1*3 + j, node2*3 + k] += k_lokal[j ][k + 3]
+                gsm[node2*3 + j, node1*3 + k] += k_lokal[j + 3][k]
+                gsm[node2*3 + j, node2*3 + k] += k_lokal[j +3 ][k +3]
 
     return gsm
 
 
+def fim_vektor(elementlengder, element, fordelte_laster):
+
+    element_index = element[0]
+    lastvec = np.zeros(6)
+    for i in range (len(fordelte_laster)): #sjekker om det aktuelle elementet har en fordelt last
+
+        if fordelte_laster[i][1] == element_index:
+            q1 = fordelte_laster[i][2]
+            q2 = fordelte_laster[i][3]
+            l = float(elementlengder[element_index])
+
+            # deler opp lasten i to trekantlaster
+            fim_ende1 = (-1/20) * (q1*l**2) + (-1/30) * (q2*l**2)
+            fim_ende2 = ( 1/30) * (q1*l**2) + ( 1/20) * (q2*l**2)
+
+            #legger fastinnspenningskrefter- og momenter i riktig rekkefølge
+            lastvec = np.array([0, 0, fim_ende1, 0, 0, fim_ende2])
+  
+    return(lastvec)  
 
 
 def lokal_lastvektor(elementlengder, element, fordelte_laster):
@@ -138,11 +138,9 @@ def lokal_lastvektor(elementlengder, element, fordelte_laster):
             fis_ende1 = (1/2 * q1 * l) + (1/2 * q2 * l) - fis_ende2
             
             #legger fastinnspenningskrefter- og momenter i riktig rekkefølge
-            lastvec = np.array([[0], [fis_ende1], [fim_ende1], [0], [fis_ende2], [fim_ende2]])
+            lastvec = np.array([0, fis_ende1, fim_ende1, 0, fis_ende2, fim_ende2])
   
-    return(lastvec)
-
-
+    return(lastvec) 
 
 
 def trans_lokal_lastvektor(fi, lokal_lastvektor):
@@ -199,10 +197,7 @@ def global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, 
 def løs_deformasjoner(gsm, glv): #Løser likningssystemet fra global stivhetsmatrise og global lastvektor,
                                  #svaret vi får ut er deformasjonsvektoren 
 
-    def_vec = np.matmul(np.linalg.inv(gsm),np.transpose(glv))
-
-    return(def_vec)
-
+    return()
 
 
 def punktlaster_vec(knutepunkter, punktlaster): #Punktlaster kan kun tas opp i knutepunkt
@@ -246,11 +241,13 @@ def punktlaster_vec(knutepunkter, punktlaster): #Punktlaster kan kun tas opp i k
     return(plastvec)
 
 
-def lokale_deformasjoner():
+def lokale_deformasjoner(): 
 
     return()
 
 
-def lokale_endekrefter():
+def lokale_endekrefter(gsm, deformasjoner, fim): #Må gjøres
     
+    S = np.matmul(gsm, deformasjoner) + fim
+
     return()

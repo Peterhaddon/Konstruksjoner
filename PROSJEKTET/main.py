@@ -43,26 +43,38 @@ elementlengder = lengder(knutepunkter,elementer)
 # #box:
 # print(I(elementer[2])/(10**6))
 
-numbers = 1
-first_index = 0
-fig_init, ax_init, fig_def, ax_def = setup_plots()
-plot_structure(ax_init, kp_koordinater, elementer_kp_til_kp, numbers, first_index)
-plt.show()
+# numbers = 1
+# first_index = 0
+# fig_init, ax_init, fig_def, ax_def = setup_plots()
+# plot_structure(ax_init, kp_koordinater, elementer_kp_til_kp, numbers, first_index)
+# plt.show()
 
 # print(lengder(knutepunkter, elementer))
 
 # print(np.round(global_stivhetsmatrise(knutepunkter, elementer, elementlengder),1))
+# print(element_stivhetsmatrise(elementer[0], elementlengder))
+# print(global_stivhetsmatrise(knutepunkter,elementer,elementlengder))
 # print(np.round(trans_matrise(np.pi/2),1))
 # print(trans_k(0,element_stivhetsmatrise(elementer[0], elementlengder)))
 
 # print(element_stivhetsmatrise(elementer[0],elementlengder))
 
-# print(lokal_lastvektor(elementlengder, elementer[0],fordelte_laster))
+# print(lokal_lastvektor(elementlengder, elementer[0],fordelte_laster) - punktlaster_vec(knutepunkter, punktlaster))
 # print(np.round(trans_lokal_lastvektor((np.pi/2),lokal_lastvektor(elementlengder, elementer[0],fordelte_laster)),1))
 # print(global_lastvektor(knutepunkter,elementer, elementlengder, fordelte_laster, punktlaster))
 
-# gsm = global_stivhetsmatrise(knutepunkter, elementer, elementlengder)
-# glv = global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, punktlaster)
+gsm = global_stivhetsmatrise(knutepunkter, elementer, elementlengder)
+glv = global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, punktlaster)
+# gsm2 = stivhet(len(elementer),elementer, elementlengder, len(knutepunkter),knutepunkter,elementer)
+# gsm3 = global_stivhetsmatrise2(knutepunkter, elementer, elementlengder)
+# print((np.round(gsm)))
+# print('gsm: ')
+# print(gsm)
+# print('glv: ')
+# print(glv)
+# print(np.linalg.det(element_stivhetsmatrise(elementer[0],elementlengder)))
+# print(np.allclose(gsm, np.transpose(gsm))) #sjekker om symmetrisk
+# print(element_stivhetsmatrise(elementer[0], elementlengder))
 # print(løs_deformasjoner(gsm, glv))
 # print(np.round(gsm/100000000))
 

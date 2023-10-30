@@ -1,0 +1,124 @@
+n =   int( 3 * (nj1 - 1) + row)
+                m_1 = int( 3 * (nj1 - 1))
+                m_2 = int( 3 * (nj1 - 1) + 1)
+                m_3 = int( 3 * (nj1 - 1) + 2)
+                m_4 = int( 3 * (nj2 - 1))
+                m_5 = int( 3 * (nj2 - 1) + 1)
+                m_6 = int( 3 * (nj2 - 1) + 2)
+
+
+            if row < 3:
+                n =   int( 3 * (nj1) + row)
+                m_1 = int( 3 * (nj1))
+                m_2 = int( 3 * (nj1) + 1)
+                m_3 = int( 3 * (nj1) + 2)
+                m_4 = int( 3 * (nj2))
+                m_5 = int( 3 * (nj2) + 1)
+                m_6 = int( 3 * (nj2) + 2)
+
+            else:
+                n =   int( 3 * (nj2 - 1) + (row - 3))
+                m_1 = int( 3 * (nj1 - 1))
+                m_2 = int( 3 * (nj1 - 1) + 1)
+                m_3 = int( 3 * (nj1 - 1) + 2)
+                m_4 = int( 3 * (nj2 - 1))
+                m_5 = int( 3 * (nj2 - 1) + 1)
+                m_6 = int( 3 * (nj2 - 1) + 2)
+
+
+
+
+def global_stivhetsmatrise(knutepunkter, elementer, lengder):
+    antall_kp = len(knutepunkter)
+    gsm = np.zeros((antall_kp * 3, antall_kp * 3))
+
+    # Går gjennom hvert element
+    for i in range(len(elementer)):
+
+        # Finner vinkel fi ift. global x-akse
+        dx = knutepunkter[elementer[i][2]][1] - knutepunkter[elementer[i][1]][1]
+        dy = knutepunkter[elementer[i][2]][2] - knutepunkter[elementer[i][1]][2] 
+        fi = np.arctan2(dy, dx)
+
+        # Bestemmer, så transformerer lokal stivhetsmatrise til globale koordinater
+        k_lokal = element_stivhetsmatrise(elementer[i], lengder) 
+        k_transformert = trans_k(fi, k_lokal)
+        
+        # Finner aktuelle knutepunktene
+        element = elementer[i]
+        nj1 = element[1]
+        nj2 = element[2]
+
+        # Går igjennom radene til den lokale stivhetsmatrisen
+        for row in range(k_transformert.shape[0]):
+
+            n =   int( 3 * (nj1) + row)
+            m_1 = int( 3 * (nj1))
+            m_2 = int( 3 * (nj1) + 1)
+            m_3 = int( 3 * (nj1) + 2)
+            m_4 = int( 3 * (nj2))
+            m_5 = int( 3 * (nj2) + 1)
+            m_6 = int( 3 * (nj2) + 2)
+
+            #skjer noe rart med inputfil 3 ihvertfall...
+
+            # Legger til bidraget i global stivhetsmatrise
+
+            gsm[n, m_1] += k_transformert[row, 0]
+            gsm[n, m_2] += k_transformert[row, 1]
+            gsm[n, m_3] += k_transformert[row, 2]
+            gsm[n, m_4] += k_transformert[row, 3]
+            gsm[n, m_5] += k_transformert[row, 4]
+            gsm[n, m_6] += k_transformert[row, 5]
+
+
+    return gsm
+
+
+
+#Alternativt: Funker ikke stort bedre...
+def glob_frihetsgrad(elem):
+    #Funksjon som regner ut gobal frihetsgrad
+    glob_frihet = [] #Resultat [glob1_1, glob2_1, glob3_1, glob1_2...]
+    # 0-indeksering p ̊a knutepunkter 0-9
+    knutepunkt_1 = elem[0]
+    knutepunkt_2 = elem[1]
+        #Henter frihetsgradene for knutepunkt 1
+    for x in range(3):
+        glob_frihet.append(3*(knutepunkt_1-1) + (x))
+    #Henter frihetsgradene for knutepunkt 2
+    for x in range(3):
+        glob_frihet.append(3*(knutepunkt_2-1) + (x))
+    return glob_frihet
+
+def stivhet(nelem,elem,elementLengder,npunkt,punkt,elemData):
+    k_tot = []
+    #Setter opp den globale stivehetsmatrisen
+    for x in range(3*npunkt):
+        k_tot.append([])
+        for y in range(3*npunkt):
+            k_tot[x].append(0)
+    for x in range(nelem):
+    #Henter lokal matrise for element x
+        k_lokal = element_stivhetsmatrise(elem[x], elementLengder) #Henter ut frihetsgrader (globale) til elementet
+        # print(k_lokal)
+        frihetsgrader_global = glob_frihetsgrad(elem[x]) #1. elementet [1,2,3, 4,5,6]
+            #Legger til den transformerte lokale stivhetsmatrisen inn i den globale stivhetsmatrisen
+        for i in range(len(k_lokal)):
+            for j in range(len(k_lokal)):
+                k_tot[frihetsgrader_global[i]][frihetsgrader_global[j]] += k_lokal.item(i,j)
+    return k_tot
+
+
+def assemble_local_to_global(k_local, k_global, node1, node2):
+    # Legger til lokal stivhetsmatrise i global stivhetsmatrise
+    dofs_per_node = 6
+    for i in range(dofs_per_node):
+        for j in range(dofs_per_node):
+            k_global[node1 * dofs_per_node + i, node1 * dofs_per_node + j] += k_local[i, j]
+            k_global[node1 * dofs_per_node + i, node2 * dofs_per_node + j] += k_local[i, j + dofs_per_node]
+            k_global[node2 * dofs_per_node + i, node1 * dofs_per_node + j] += k_local[i + dofs_per_node, j]
+            k_global[node2 * dofs_per_node + i, node2 * dofs_per_node + j] += k_local[i + dofs_per_node, j + dofs_per_node]
+
+    return k_global
+
