@@ -24,7 +24,8 @@ res = S_solve(knutepunkter, elementer, elementlengder, r, fordelte_laster)
 
 # # __TESTING__
 
-print(res)
+# print("res:", res)
+# print("glv:", glv)
 
 # print('\nknutepunkter')
 # print(len(knutepunkter))

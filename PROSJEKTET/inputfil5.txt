@@ -15,8 +15,8 @@
 
 #Element-info i rekkefølge:
 #Element nummer, Knutepunkt 1, Knutepunkt 2, E-modul [Gpa], Geometri (c for rør, b for box, i for i-profil), Dimensjonene til profilene [mm]. I profil hhv: hs, ts, bf, tf
-0, 0, 1, 100, c, 100, 10
-1, 1, 2, 100, c, 100, 10
+0, 0, 1, 1, c, 100, 10
+1, 1, 2, 1, c, 100, 10
 
 
 #Antall fordelte laster:

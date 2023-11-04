@@ -9,6 +9,8 @@ def element_stivhetsmatrise(element, lengder):
     A=areal(element)
     Iy=I(element)
 
+    L=E=A=Iy=1
+
     #setter opp tim 6x6 matrise, og adderer inn stivheter 
     k_lokal_matrise = np.zeros((6, 6)) 
     k_lokal_matrise [0][0] += E*A/L
@@ -137,7 +139,7 @@ def lokal_lastvektor(elementlengder, element, fordelte_laster):
             fis_ende2 = (fim_ende1 + fim_ende2 + (1/2 * q1 * l * 1/3 * l) + (1/2 * q2 * l * 2/3 * l))/(l)
             fis_ende1 = (1/2 * q1 * l) + (1/2 * q2 * l) - fis_ende2
             
-            #adderer inn fastinnspenningskrefter- og momenter
+            #legger inn fastinnspenningskrefter- og momenter
             lastvec = np.array([0, fis_ende1, fim_ende1, 0, fis_ende2, fim_ende2])
   
     return(lastvec) 
@@ -162,7 +164,7 @@ def trans_global_lastvektor(fi, global_lastvektor):
 def global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, punktlaster):
     antall_kp = len(knutepunkter)
     glv = np.zeros((antall_kp * 3)) #global lastvektor
-    glv = np.transpose(glv) # trengs denne?
+    # glv = np.transpose(glv) # trengs denne?
 
     # Går gjennom hvert element
     for i in range(len(elementer)):
@@ -198,7 +200,7 @@ def global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, 
         glv[m_6] += lastvektor_transformert[5]
 
     glv -= punktlaster_vec(knutepunkter, punktlaster) #legger til bidrag fra punktlaster, med negativt fortegn?!
-   
+    print(punktlaster_vec(knutepunkter, punktlaster))
     return glv
 
 
@@ -225,31 +227,25 @@ def punktlaster_vec(knutepunkter, punktlaster): #Punktlaster kan kun tas opp i k
     for i in range (len(punktlaster)): #henter ut info for punktlastene
 
         knutepunkt = punktlaster[i][1]
-        retning = punktlaster[i][2]
+        retning_deg = punktlaster[i][2]
         lastintensitet = punktlaster[i][3]
 
-# MÅ ENDRES
-# MÅ ENDRES
-# MÅ ENDRES
-# MÅ ENDRES
-# MÅ ENDRES
+        # Konverterer retning fra grader til radianer
+        retning_rad = np.radians(retning_deg)
 
+        # Regner ut sin og cos for retningen i radianer
+        sin_retning = np.sin(retning_rad)
+        cos_retning = np.cos(retning_rad)
 
-        x_komp = 0
-        y_komp = -lastintensitet
+        # Beregner x- og y-komponentene av lastintensiteten basert på retningen
+        x_komp = np.round(lastintensitet * cos_retning, 10)
+        y_komp = np.round(lastintensitet * sin_retning, 10)
 
-# MÅ ENDRES
-# MÅ ENDRES
-# MÅ ENDRES
-# MÅ ENDRES
-# MÅ ENDRES
-# MÅ ENDRES, alle punktlaster funker nå kun nedover! Må bruke retning til noe fornuftig, dekomponere til x og y komponenter...
-
-
+        #finner riktig index for komponentene som skal i punktlastvektoren
         x_komp_index = int( 3 * (knutepunkt)    )
         y_komp_index = int( 3 * (knutepunkt) + 1)
 
-        #innadderer lastintensiteten riktig plass i punktlastvektor
+        #innadderer lastintensiteten i punktlastvektor
         plastvec[x_komp_index] += x_komp 
         plastvec[y_komp_index] += y_komp
 
@@ -278,13 +274,11 @@ def S_solve(knutepunkter, elementer, elementlengder, r, fordelte_laster):
         knutepunkt_1 = elementer[x][1]
         knutepunkt_2 = elementer[x][2]
 
-        # Henter ut liste med deformasjoner for knutepunkt 1
+        # Henter ut liste med deformasjoner for elementets knutepunkt 1 og 2
         v_1 = r[(knutepunkt_1) * 3:(knutepunkt_1) * 3 + 3]
-
-        # Henter ut liste med deformasjoner for knutepunkt 2
         v_2 = r[(knutepunkt_2) * 3:(knutepunkt_2) * 3 + 3]
 
-        # Setter sammen de to arrayene
+        # Setter sammen de to arrayene i en matrise
         v_tot = np.concatenate((v_1, v_2))
 
         # Finner elementvinkel fi ift. global x-akse
@@ -294,6 +288,7 @@ def S_solve(knutepunkter, elementer, elementlengder, r, fordelte_laster):
 
         # Transformerer deformasjonene tilbake til lokalt koordinatsystem
         v_tot_lokal = trans_global_lastvektor(fi, v_tot)
+        # print(v_tot_lokal)
 
         # Løser ligningsystemet i lokalt system, og får kreftene som virker i knutepunktene
         S = np.dot(k_lok, v_tot_lokal) + fim
