@@ -99,7 +99,7 @@ def global_stivhetsmatrise(knutepunkter, elementer, lengder):
     return gsm
 
 
-def fim_vektor(elementlengder, element, fordelte_laster):
+def fim_vektor(elementlengder, element, fordelte_laster): #IKKE I BRUK?
 
     element_index = element[0]
     lastvec = np.zeros(6)
@@ -200,7 +200,6 @@ def global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, 
         glv[m_6] += lastvektor_transformert[5]
 
     glv -= punktlaster_vec(knutepunkter, punktlaster) #legger til bidrag fra punktlaster, med negativt fortegn?!
-    print(punktlaster_vec(knutepunkter, punktlaster))
     return glv
 
 
@@ -266,7 +265,7 @@ def S_solve(knutepunkter, elementer, elementlengder, r, fordelte_laster):
 
     for x in range(len(elementer)):
         # Henter ut de aktuelle fastinnspenningskreftene
-        fim = fim_vektor(elementlengder, elementer[x], fordelte_laster)
+        fim = lokal_lastvektor(elementlengder, elementer[x], fordelte_laster)
 
         # Henter så ut tverrsnittsdata
         k_lok = element_stivhetsmatrise(elementer[x], elementlengder)
@@ -291,7 +290,7 @@ def S_solve(knutepunkter, elementer, elementlengder, r, fordelte_laster):
         # print(v_tot_lokal)
 
         # Løser ligningsystemet i lokalt system, og får kreftene som virker i knutepunktene
-        S = np.dot(k_lok, v_tot_lokal) + fim
+        S = np.dot(k_lok, v_tot_lokal) - fim
 
         # Legger så til disse kreftene i resultatarrayet
         res[x] = S

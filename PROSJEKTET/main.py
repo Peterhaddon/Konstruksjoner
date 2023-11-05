@@ -24,8 +24,11 @@ res = S_solve(knutepunkter, elementer, elementlengder, r, fordelte_laster)
 
 # # __TESTING__
 
-# print("res:", res)
+print("res:", np.round(res,10))
 # print("glv:", glv)
+
+
+
 
 # print('\nknutepunkter')
 # print(len(knutepunkter))
@@ -40,7 +43,7 @@ res = S_solve(knutepunkter, elementer, elementlengder, r, fordelte_laster)
 # print(len(fordelte_laster))
 # print(fordelte_laster)
 
-# #Plot:
+#Plot:
 # numbers = 1
 # first_index = 0
 # fig_init, ax_init, fig_def, ax_def = setup_plots()

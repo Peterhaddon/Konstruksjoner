@@ -8,9 +8,9 @@
 
 #KP-info i rekkefølge:
 #Knutepunktsnummer, x-koordinat [m], y-koordinat [m], Hvordan det er innspent(0 for fri, 1 for fast innspent, 2 for fritt opplagt)
-0, 0, 0, 1
-1, 0.5, 0, 0
-2, 1, 0, 1
+0, 0, 0, 2
+1, 1, 0, 0
+2, 2, 0, 2
 
 
 #Element-info i rekkefølge:
