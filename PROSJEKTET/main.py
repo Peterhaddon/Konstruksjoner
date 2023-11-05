@@ -8,6 +8,7 @@ from plot import * #ser ut til å fungere, men mangler def_structure
 from readfromfile import * 
 from elementfunksjoner import *
 from matriseoperasjoner import *
+from plotKrefter import *
 
 
 
@@ -20,14 +21,27 @@ gsm = global_stivhetsmatrise(knutepunkter, elementer, elementlengder)
 glv = global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, punktlaster)
 r = (løs_deformasjoner(gsm, glv))
 res = S_solve(knutepunkter, elementer, elementlengder, r, fordelte_laster)
-
+M_maks, N_maks = maks_krefter(elementer, elementlengder, res, fordelte_laster)
 
 # # __TESTING__
 
-print("res:", np.round(res,10))
+# print("res:", np.round(res,10))
+
 # print("glv:", glv)
 
+element=elementer[0]
 
+
+
+# plot_moment(elementer, elementlengder, res, fordelte_laster)
+# plot_skjaer(elementer, elementlengder, res, fordelte_laster)
+# plot_normal(elementer, elementlengder, res, fordelte_laster)
+
+# print("res:", res)
+# print("fordelte_laster:", fordelte_laster)
+# print("punktlaster:", punktlaster)
+# print("elementer:", elementer)
+# print("elementlengder:", elementlengder )
 
 
 # print('\nknutepunkter')
@@ -43,7 +57,7 @@ print("res:", np.round(res,10))
 # print(len(fordelte_laster))
 # print(fordelte_laster)
 
-#Plot:
+# # # Plot:
 # numbers = 1
 # first_index = 0
 # fig_init, ax_init, fig_def, ax_def = setup_plots()

@@ -1,4 +1,5 @@
 import numpy as np
+from plotKrefter import *
 
 def lengder(knutepunkter, elementer):
  
@@ -38,6 +39,30 @@ def I(element): # Regner ut I_y for diverse profiler
         return Iy
 
 
+def hoyde(element): # Regner ut I_y for diverse profiler
+
+    if element[4] == 'i': # I-profil
+        tf = element[8] # tykkelse flens 
+        bf = element[7] # bredde flens
+        ts = element[6] # tykkelse steg 
+        hs = element[5] # høyde steg
+        h = hs + 2 * tf
+        return h
+
+    elif element[4] == 'c': # rørprofil
+        D = element[5] # ytre diameter
+        t = element[6] # tykkelse
+        d = D - 2 * t  # indre diameter
+        h = D
+        return h
+
+    elif element[4] == 'b': # Kvadratisk box-profil
+        b = element[5] # ytre bredde/høyde
+        t = element[6] # tykkelse
+        h = b
+        return h
+
+
 def areal(element): # Regner ut areal for diverse profiler
 
     if element[4] == 'i': # I-profil
@@ -64,3 +89,68 @@ def areal(element): # Regner ut areal for diverse profiler
         t = element[6]      # tykkelse
         arealB = t * b      #totalt areal
         return arealB
+
+
+def maks_krefter(elementer, elementlengder, res, fordelte_laster):
+    #lager momentfunksjon for alle elementer
+
+    #initialiserer lister:
+    M_max=[]
+    N_max=[]
+
+    #Finner elementer med fordelte laster
+    elementer_med_fordeltelaster=[]
+    for i in range (len(fordelte_laster)):
+        elementer_med_fordeltelaster.append(fordelte_laster[i][1])
+
+    for i in range(len(elementer)):
+        # Itererer gjennom alle elementene
+        element = elementer[i]
+        lengde = elementlengder[i]
+        S = res[i]
+
+        #Henter ut nødvendige verdier
+        x = np.linspace(0, lengde, 1000)
+        M1=S[2]
+        Q1=S[1]
+        N1=S[0]
+
+        # Løser funksjonen numerisk. Lineær fordeling hvis den ikke har fordelt last
+        if element[0] in elementer_med_fordeltelaster:
+            q1, q2 = hent_q1_og_q2(element[0], fordelte_laster)
+            moment = (1/3* q1*x**2+1/6 *(q1 +((q2-q1)/(lengde))*x)*x**2 -Q1*x -M1)
+        
+        else:
+            moment = -M1 -Q1*x
+        
+        maks_moment = max(moment)
+
+        # legger til den høyeste verdien for aktuelt element i listen over høyeste moment for alle element
+        M_max.append(maks_moment)
+        N_max.append(N1)
+
+    return M_max, N_max
+
+
+def maks_spenning(M_maks, N_maks, element): #Finner høyeste spenning i bjelken
+
+    #Henter ut Nødvendige verdier for bjelken
+    M = M_maks
+    N = N_maks
+    E = element[3]
+    Iy = I(element)
+    A = areal(element)
+    z = hoyde(element)
+
+    #regner ut bøyespenningen:
+    sigma = (max([((M / Iy) * z) + (N)/A,((M / Iy) * -z) + (N)/A ] , key=abs)) 
+    #abs M pga skjekker bøyespending ved positiv og negativ z verdi
+    
+    return sigma
+
+
+def prosent_flyt(sigma, element):
+    prosent = []
+    prosent.append(round((abs(sigma)/element[3]) * 100))
+    return prosent
+
