@@ -87,7 +87,7 @@ def areal(element): # Regner ut areal for diverse profiler
     elif element[4] == 'b': # Kvadratisk box-profil
         b = element[5]      # ytre bredde/høyde
         t = element[6]      # tykkelse
-        arealB = t * b      #totalt areal
+        arealB = b**2 - (b-2*t)**2      #totalt areal
         return arealB
 
 

@@ -34,12 +34,12 @@ def plot_structure(ax, punkt, elem, numbers, index_start):
             # avoid number superposition when elements cross in the middle
             ax.text(nodes[el_nod[iel, 0] - 1, 0] + ( nodes[el_nod[iel, 1] - 1, 0] - nodes[el_nod[iel, 0] - 1, 0] ) / 2.5,
                     nodes[el_nod[iel, 0] - 1, 1] + ( nodes[el_nod[iel, 1] - 1, 1] - nodes[el_nod[iel, 0] - 1, 1] ) / 2.5,
-                    str(iel + index_start), color = 'blue', fontsize = 16)
+                    str(iel + index_start), color = 'blue', fontsize = 10)
 
     if numbers == 1:
         # Plot node number
         for inod in range(0, nodes.shape[0]):
-            ax.text(nodes[inod, 0], nodes[inod, 1], str(inod + index_start), color = 'red', fontsize = 16)
+            ax.text(nodes[inod, 0], nodes[inod, 1], str(inod + index_start), color = 'red', fontsize = 10)
 
 
 def format_data(knutepunkter, elementer): #formaterer lister så det kan tolkes riktig av plot_structure
@@ -66,7 +66,7 @@ def plot_structure_def(ax, punkt, elem, numbers, index_start, r):
     if numbers == 1:
         # Plot node number
         for inod in range(0, nodes.shape[0]):
-            ax.text(nodes[inod, 0], nodes[inod, 1], str(inod + index_start), color = 'red', fontsize = 16)
+            ax.text(nodes[inod, 0], nodes[inod, 1], str(inod + index_start), color = 'red', fontsize = 10)
  
     for iel in range(0, el_nod.shape[0]):
         delta_x = nodes[el_nod[iel, 1] - 1, 0] - nodes[el_nod[iel, 0] - 1, 0]
@@ -98,7 +98,7 @@ def plot_structure_def(ax, punkt, elem, numbers, index_start, r):
         if numbers == 1:
             # Plot element numbers. These are not plotted in the midpoint to
             # avoid number superposition when elements cross in the middle
-            ax.text(xx2[round(xx2.size / 2.5)], zz2[round(xx2.size / 2.5)], str(iel + index_start), color = 'blue', fontsize = 16)
+            ax.text(xx2[round(xx2.size / 2.5)], zz2[round(xx2.size / 2.5)], str(iel + index_start), color = 'blue', fontsize = 10)
 
 
 

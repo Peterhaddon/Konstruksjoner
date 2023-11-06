@@ -13,7 +13,7 @@ from plotKrefter import *
 
 
 # bestemmer variabler som er nødvendige for testing av funksjoner:
-file_path = 'PROSJEKTET/Inputfil.txt'
+file_path = 'PROSJEKTET/Inputfil_J.txt'
 knutepunkter, elementer, fordelte_laster, punktlaster = readfromfile(file_path)
 kp_koordinater, elementer_kp_til_kp = format_data(knutepunkter, elementer)
 elementlengder = lengder(knutepunkter,elementer)
@@ -24,43 +24,19 @@ res = S_solve(knutepunkter, elementer, elementlengder, r, fordelte_laster)
 M_maks, N_maks = maks_krefter(elementer, elementlengder, res, fordelte_laster)
 rotasjoner = r[::3]
 
-# # __TESTING__
-
-print("res")
-print(np.round(res,2))
+# __AVKOMMENTER DET DU ØNSKER Å KJØRE NEDENFOR__
 
 print_prosent_flyt(elementer, elementlengder, res, fordelte_laster)
 
-
+    # Plotter diagrammer:
 # plot_moment(elementer, elementlengder, res, fordelte_laster)
 # plot_skjaer(elementer, elementlengder, res, fordelte_laster)
 # plot_normal(elementer, elementlengder, res, fordelte_laster)
 
-# print("res:", res)
-# print("fordelte_laster:", fordelte_laster)
-# print("punktlaster:", punktlaster)
-# print("elementer:", elementer)
-# print("elementlengder:", elementlengder )
+    # Printer array med [N1, Q1, M1, N2, Q2, M2] for alle elementer
+# print("res:", np.round(res))
 
-
-# print('\nknutepunkter')
-# print(len(knutepunkter))
-# print(knutepunkter)
-# print('\nelementer')
-# print(len(elementer))
-# print(elementer)
-# print('\npunktlaster')
-# print(len(punktlaster))
-# print(punktlaster)
-# print('\nfordelte_laster')
-# print(len(fordelte_laster))
-# print(fordelte_laster)
-
-
-
-
-# # Plot:
-# print(rotasjoner)
+    # Plot Struktur:
 # skalering = 1
 # numbers = 1
 # first_index = 0
