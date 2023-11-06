@@ -144,7 +144,7 @@ def maks_spenning(M_maks, N_maks, element): #Finner høyeste spenning i bjelken
 
     #regner ut bøyespenningen:
     sigma = (max([((M / Iy) * z) + (N)/A,((M / Iy) * -z) + (N)/A ] , key=abs)) 
-    #abs M pga skjekker bøyespending ved positiv og negativ z verdi
+    #abs M da vi kun er interessert i absoluttverdien av dette
     
     return sigma
 
