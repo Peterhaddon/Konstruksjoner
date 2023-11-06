@@ -9,7 +9,7 @@ def element_stivhetsmatrise(element, lengder):
     A=areal(element)
     Iy=I(element)
 
-    L=E=A=Iy=1
+    # L=E=A=Iy=1
 
     #setter opp tim 6x6 matrise, og adderer inn stivheter 
     k_lokal_matrise = np.zeros((6, 6)) 

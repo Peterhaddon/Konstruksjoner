@@ -25,7 +25,7 @@ M_maks, N_maks = maks_krefter(elementer, elementlengder, res, fordelte_laster)
 
 # # __TESTING__
 
-# print("res:", np.round(res,10))
+print("res:", np.round(res,10))
 
 # print("glv:", glv)
 
