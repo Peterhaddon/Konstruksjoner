@@ -28,7 +28,7 @@ def plot_moment(elementer, elementlengder, res, fordelte_laster):
         # Løser funksjonen numerisk. Lineær fordeling hvis den ikke har fordelt last
         if element[0] in elementer_med_fordeltelaster:
             q1, q2 = hent_q1_og_q2(element[0], fordelte_laster)
-            moment = (1/3* q1*x**2+1/6 *(q1 +((q2-q1)/(lengde))*x)*x**2 -Q1*x -M1)
+            moment = (-M1 -Q1*x) - (((q2-q1)*x/lengde + q1)*x * (x/2))
         
         else:
             moment = -M1 -Q1*x
@@ -55,7 +55,7 @@ def hent_q1_og_q2(element_identifikator, fordelte_laster):
     for fordelt_last in fordelte_laster:
         if fordelt_last[1] == element_identifikator:
             # Returner q1 og q2 for riktig element_identifikator
-            return fordelt_last[1], fordelt_last[2]
+            return fordelt_last[2], fordelt_last[3]
     
     # Hvis element_identifikator ikke finnes i fordelte_laster, returner 0,0
     return 0, 0
@@ -85,7 +85,7 @@ def plot_skjaer(elementer, elementlengder, res, fordelte_laster):
         # Løser funksjonen numerisk. flat fordeling hvis den ikke har fordelt last
         if element[0] in elementer_med_fordeltelaster:
             q1, q2 = hent_q1_og_q2(element[0], fordelte_laster)
-            skjaer = (q1 *x + ((q2 - q1)/(2*lengde))*x**2 - Q1)
+            skjaer = -(q1+ (q2 - q1)*x/lengde )*x + -Q1
         
         else:
             skjaer = x*0-Q1

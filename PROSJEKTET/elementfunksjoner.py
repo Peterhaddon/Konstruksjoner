@@ -118,7 +118,7 @@ def maks_krefter(elementer, elementlengder, res, fordelte_laster):
         # Løser funksjonen numerisk. Lineær fordeling hvis den ikke har fordelt last
         if element[0] in elementer_med_fordeltelaster:
             q1, q2 = hent_q1_og_q2(element[0], fordelte_laster)
-            moment = (1/3* q1*x**2+1/6 *(q1 +((q2-q1)/(lengde))*x)*x**2 -Q1*x -M1)
+            moment = -(-M1 -Q1*x) + (((q2-q1)*x/lengde + q1)*x * (x/2))
         
         else:
             moment = -M1 -Q1*x
@@ -135,7 +135,7 @@ def maks_krefter(elementer, elementlengder, res, fordelte_laster):
 def maks_spenning(M_maks, N_maks, element): #Finner høyeste spenning i bjelken
 
     #Henter ut Nødvendige verdier for bjelken
-    M = M_maks
+    M = M_maks[0]
     N = N_maks
     E = element[3]
     Iy = I(element)
@@ -154,3 +154,14 @@ def prosent_flyt(sigma, element):
     prosent.append(round((abs(sigma)/element[3]) * 100))
     return prosent
 
+
+def print_prosent_flyt(elementer, elementlengder, res, fordelte_laster):
+
+    prosent_info=[]
+    M_maks, N_maks = maks_krefter(elementer, elementlengder, res, fordelte_laster)
+    for i in range(len(elementer)):
+        sigma = maks_spenning(M_maks[i], N_maks[i], elementer[i])
+        prosent = prosent_flyt(sigma, elementer[i])
+        prosent_rounded = np.round(prosent[0])
+        M_maks_rounded = (np.round(M_maks[i][0],2))
+        print(f"Element: {elementer[i][0]:4}    Største moment (Nm): {M_maks_rounded:15}     Prosent av flyt: {prosent_rounded:6}  ")
