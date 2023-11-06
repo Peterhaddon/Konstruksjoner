@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import CubicSpline
 
 # importerer funksjoner definert i andre filer
-from plot import * #ser ut til å fungere, men mangler def_structure
+from plotStruktur import * 
 from readfromfile import * 
 from elementfunksjoner import *
 from matriseoperasjoner import *

@@ -8,6 +8,8 @@ def plot_moment(elementer, elementlengder, res, fordelte_laster):
     n = int(np.sqrt(len(elementer))+1)
     fig, axes = plt.subplots(n, n, figsize=(10, 8))
 
+    fig.canvas.manager.set_window_title('Momentfordeling for Elementer')
+
     #Finner elementer med fordelte laster
     elementer_med_fordeltelaster=[]
     for i in range (len(fordelte_laster)):
@@ -66,6 +68,8 @@ def plot_skjaer(elementer, elementlengder, res, fordelte_laster):
     n = int(np.sqrt(len(elementer))+1)
     fig, axes = plt.subplots(n, n, figsize=(10, 8))
 
+    fig.canvas.manager.set_window_title('Skjærfordeling for Elementer')
+
     #Finner elementer med fordelte laster
     elementer_med_fordeltelaster=[]
     for i in range (len(fordelte_laster)):
@@ -110,6 +114,8 @@ def plot_normal(elementer, elementlengder, res, fordelte_laster):
 
     n = int(np.sqrt(len(elementer))+1)
     fig, axes = plt.subplots(n, n, figsize=(10, 8))
+
+    fig.canvas.manager.set_window_title('Normalkraftfordeling for Elementer')
     
     for i in range(len(elementer)):
         # Itererer gjennom alle elementene
