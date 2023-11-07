@@ -10,7 +10,7 @@
 #Knutepunktsnummer, x-koordinat [m], y-koordinat [m], Hvordan det er innspent(0 for fri, 1 for fast innspent, 2 for fritt opplagt)
 0, 0, 0, 1
 1, 0, 1, 0
-2, 0, 2, 1
+2, 0, 2, 0
 
 
 
@@ -35,4 +35,4 @@ q, 1, 1, 1
 
 #Info om punktlastene i rekkefølge:
 #Type last, Hvilket knutepunkt det virker pÃ¥, Hvilken retning det virker i (i forhold til globalt aksesystem), Intensitet [N]
-pk, 1, 0, 1
+pk, 2, 90, 1

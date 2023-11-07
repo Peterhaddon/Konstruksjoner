@@ -34,6 +34,7 @@ def main():
 
     #    # Print element og prosent av flyt
     print_prosent_flyt(elementer, elementlengder, res, fordelte_laster)
+    print_momenter(elementer, elementlengder, res, fordelte_laster)
 
     #    # Plotter diagrammer:
     # plot_moment(elementer, elementlengder, res, fordelte_laster)
