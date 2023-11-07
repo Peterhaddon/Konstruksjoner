@@ -1,7 +1,7 @@
 import numpy as np
 from elementfunksjoner import *
 
-def element_stivhetsmatrise(element, lengder):
+def element_stivhetsmatrise(element, lengder): # Lager lokal stivhetsmatrise for element
 
     #Definerer verdier for det aktuelle elementet
     L=lengder[element[0]] 
@@ -38,7 +38,7 @@ def element_stivhetsmatrise(element, lengder):
     return k_lokal_matrise
 
 
-def trans_matrise(fi):
+def trans_matrise(fi): #Lager matrise fra lokalt til globalt
 
     cos_fi = np.cos(fi)
     sin_fi = np.sin(fi)
@@ -53,7 +53,7 @@ def trans_matrise(fi):
     return T
 
 
-def trans_k(fi, k_matrise):
+def trans_k(fi, k_matrise): # Transformerer k
     
     # Finner k_g med ta transponert(T) x k_matrise x T
 
@@ -62,7 +62,7 @@ def trans_k(fi, k_matrise):
     return k_transformert
 
 
-def global_stivhetsmatrise(knutepunkter, elementer, lengder):
+def global_stivhetsmatrise(knutepunkter, elementer, lengder): #adderer inn stivhetsmatriser
     antall_kp = len(knutepunkter)
     gsm = np.zeros((antall_kp * 3, antall_kp * 3))
 
@@ -96,7 +96,7 @@ def global_stivhetsmatrise(knutepunkter, elementer, lengder):
     return gsm
 
 
-def lokal_lastvektor(elementlengder, element, fordelte_laster):
+def lokal_lastvektor(elementlengder, element, fordelte_laster):#lager den lokale lastvektoren
 
     element_index = element[0]
     lastvec = np.zeros(6)
@@ -121,7 +121,7 @@ def lokal_lastvektor(elementlengder, element, fordelte_laster):
     return(lastvec) 
 
 
-def trans_lokal_lastvektor(fi, lokal_lastvektor):
+def trans_lokal_lastvektor(fi, lokal_lastvektor): #trans lok til glob
     
     # Finner lastvektor i globalt system med ta T x k_matrise
     T = trans_matrise(fi)
@@ -129,7 +129,7 @@ def trans_lokal_lastvektor(fi, lokal_lastvektor):
     return lastvektor_transformert
 
 
-def trans_global_lastvektor(fi, global_lastvektor):
+def trans_global_lastvektor(fi, global_lastvektor): #trans glob til lok
     
     # Finner lastvektor i globalt system med ta T(transponert) x k_matrise
     T = trans_matrise(-fi)
@@ -138,7 +138,7 @@ def trans_global_lastvektor(fi, global_lastvektor):
     return lastvektor_transformert
 
 
-def global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, punktlaster):
+def global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, punktlaster): # Oppretter den globale lastvektoren
     antall_kp = len(knutepunkter)
     glv = np.zeros((antall_kp * 3)) #global lastvektor
     # glv = np.transpose(glv) # trengs denne?
@@ -181,7 +181,7 @@ def global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, 
     return glv
 
 
-def legg_inn_randbetingelser(knutepunkter, gsm):
+def legg_inn_randbetingelser(knutepunkter, gsm): #legger inn randbetignelser
     #skjekker betingelse om punkt er fast innspent eller fritt opplagt, ganger inn stivhet på diagonalen som følge
     for i in range(len(knutepunkter)): 
         #1 = fast innspent

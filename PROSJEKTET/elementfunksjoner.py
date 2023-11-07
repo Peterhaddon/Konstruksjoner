@@ -1,7 +1,7 @@
 import numpy as np
 from plotKrefter import *
 
-def lengder(knutepunkter, elementer):
+def lengder(knutepunkter, elementer): # Regner ut lengden til elementer
  
     elementlengder = np.zeros((len(elementer), 1))
     # Beregner elementlengder med Pythagoras' læresetning
@@ -39,7 +39,7 @@ def I(element): # Regner ut I_y for diverse profiler
         return Iy
 
 
-def hoyde(element): # Regner ut I_y for diverse profiler
+def hoyde(element): # Regner ut høyde for diverse profiler
 
     if element[4] == 'i': # I-profil
         tf = element[8] # tykkelse flens 
@@ -91,7 +91,7 @@ def areal(element): # Regner ut areal for diverse profiler
         return arealB
 
 
-def maks_krefter(elementer, elementlengder, res, fordelte_laster):
+def maks_krefter(elementer, elementlengder, res, fordelte_laster): # Finner de største kreftene som oppstår i et element
     #lager momentfunksjon for alle elementer
 
     #initialiserer lister:
@@ -134,7 +134,7 @@ def maks_krefter(elementer, elementlengder, res, fordelte_laster):
     return M_max, N_max
 
 
-def midt_krefter(elementer, elementlengder, res, fordelte_laster):
+def midt_krefter(elementer, elementlengder, res, fordelte_laster): # Finner kreftene som oppstår midt i et element
     #lager momentfunksjon for alle elementer
 
     #initialiserer lister:
@@ -194,13 +194,16 @@ def maks_spenning(M, N_maks, element): #Finner høyeste spenning i bjelken
     return sigma
 
 
-def prosent_flyt(sigma, element):
+def prosent_flyt(sigma, element): # Hvor mange prosent av flytspenning er maks spenning
     prosent = []
-    prosent.append(np.round((abs(sigma)/element[3]) * 100))
+    if element[4] == 'c':
+        prosent.append(np.round((abs(sigma)/210) * 100)) #Flytspenning stål
+    else:
+        prosent.append(np.round((abs(sigma)/210) * 100)) #Flytspenning aluminium
     return prosent
 
 
-def print_prosent_flyt(elementer, elementlengder, res, fordelte_laster):
+def print_prosent_flyt(elementer, elementlengder, res, fordelte_laster): #Printer alle elementers utnyttelsesgrad
 
     M_maks, N_maks = maks_krefter(elementer, elementlengder, res, fordelte_laster)
     for i in range(len(elementer)):
@@ -213,7 +216,7 @@ def print_prosent_flyt(elementer, elementlengder, res, fordelte_laster):
         print(f"Element: {elementer[i][0]:4}   Sigma (N/mm^2): {sigma_rounded:10}     Prosent av flyt: {prosent_rounded:6}  ")
 
 
-def print_momenter(elementer, elementlengder, res, fordelte_laster):
+def print_momenter(elementer, elementlengder, res, fordelte_laster): #Printer ende og midtmoment for alle element
 
 
     M_midt = midt_krefter(elementer, elementlengder, res, fordelte_laster)
