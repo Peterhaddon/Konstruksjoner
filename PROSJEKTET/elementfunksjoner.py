@@ -123,7 +123,7 @@ def maks_krefter(elementer, elementlengder, res, fordelte_laster):
         else:
             moment = -M1 -Q1*x
         
-        maks_moment = max(moment)
+        maks_moment = max(abs(moment)) #henter ut høyeste verdi funnet
 
         # legger til den høyeste verdien for aktuelt element i listen over høyeste moment for alle element
         M_max.append(maks_moment)
@@ -143,7 +143,8 @@ def maks_spenning(M_maks, N_maks, element): #Finner høyeste spenning i bjelken
     z = hoyde(element)
 
     #regner ut bøyespenningen:
-    sigma = (max([((M / Iy) * z) + (N)/A,((M / Iy) * -z) + (N)/A ] , key=abs)) 
+    sigma = (max([((M / Iy) * z) + (N)/A , ((M / Iy) * -z) + (N)/A , 
+    ((M / Iy) * -z) - (N)/A , ((M / Iy) * -z) - (N)/A] , key=abs)) 
     #abs M da vi kun er interessert i absoluttverdien av dette
     
     return sigma

@@ -11,6 +11,7 @@ def element_stivhetsmatrise(element, lengder):
 
     # L=E=A=Iy=1
 
+
     #setter opp tim 6x6 matrise, og adderer inn stivheter 
     k_lokal_matrise = np.zeros((6, 6)) 
     k_lokal_matrise [0][0] += E*A/L
@@ -43,26 +44,21 @@ def trans_matrise(fi):
     sin_fi = np.sin(fi)
     
     T = np.array([
-        [cos_fi, -sin_fi, 0, 0, 0, 0],
-        [sin_fi, cos_fi,  0, 0, 0, 0],
-        [0,      0,       1, 0, 0, 0],
-        [0,      0,       0, cos_fi, -sin_fi, 0],
-        [0,      0,       0, sin_fi, cos_fi,  0],
-        [0,      0,       0, 0,      0,       1]
-    ]) #ER DENNE RIKTIG? BOKA/koken HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
-    #ER DENNE RIKTIG? BOKA HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
-    #ER DENNE RIKTIG? BOKA HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
-    #ER DENNE RIKTIG? BOKA HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
-    #ER DENNE RIKTIG? BOKA HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
-    #ER DENNE RIKTIG? BOKA HADDE FORSKJELLIG!!!!!!!!!-------------------OBSOBSOBS
+        [cos_fi, -sin_fi, 0,  0,     0,        0],
+        [sin_fi, cos_fi,  0,  0,     0,        0],
+        [0,      0,       1,  0,     0,        0],
+        [0,      0,       0,  cos_fi, -sin_fi, 0],
+        [0,      0,       0,  sin_fi, cos_fi,  0],
+        [0,      0,       0,  0,      0,       1]]) 
     return T
 
 
 def trans_k(fi, k_matrise):
     
     # Finner k_g med ta transponert(T) x k_matrise x T
+
     T = trans_matrise(fi)
-    k_transformert = np.matmul(np.matmul(np.transpose(T),k_matrise),T)
+    k_transformert = np.matmul(np.transpose(T), np.matmul(k_matrise,T))
     return k_transformert
 
 
@@ -78,10 +74,11 @@ def global_stivhetsmatrise(knutepunkter, elementer, lengder):
         dy = knutepunkter[elementer[i][2]][2] - knutepunkter[elementer[i][1]][2] 
         fi = np.arctan2(dy, dx)
 
+
         # Bestemmer, så transformerer lokal stivhetsmatrise til globale koordinater
         k_lokal = element_stivhetsmatrise(elementer[i], lengder) 
         k_transformert = trans_k(fi, k_lokal)
-        
+
         # Finner aktuelle knutepunktene
         element = elementer[i]
         node1 = element[1]
@@ -94,30 +91,9 @@ def global_stivhetsmatrise(knutepunkter, elementer, lengder):
                 gsm[node2*3 + j, node1*3 + k] += k_transformert[j+3][k  ]
                 gsm[node2*3 + j, node2*3 + k] += k_transformert[j+3][k+3]
 
-    gsm = legg_inn_randbetingelser(knutepunkter,gsm) #legger inn nødvendige stivheter for randbetignelser
+    gsm = legg_inn_randbetingelser(knutepunkter,gsm) #legger inn nødvendige høye fjærstivheter som randbetignelser
 
     return gsm
-
-
-def fim_vektor(elementlengder, element, fordelte_laster): #IKKE I BRUK?
-
-    element_index = element[0]
-    lastvec = np.zeros(6)
-    for i in range (len(fordelte_laster)): #sjekker om det aktuelle elementet har en fordelt last
-
-        if fordelte_laster[i][1] == element_index:
-            q1 = fordelte_laster[i][2]
-            q2 = fordelte_laster[i][3]
-            l = float(elementlengder[element_index])
-
-            # deler opp lasten i to trekantlaster
-            fim_ende1 = (-1/20) * (q1*l**2) + (-1/30) * (q2*l**2)
-            fim_ende2 = ( 1/30) * (q1*l**2) + ( 1/20) * (q2*l**2)
-
-            #legger fastinnspenningskrefter- og momenter i riktig rekkefølge
-            lastvec = np.array([0, 0, fim_ende1, 0, 0, fim_ende2])
-  
-    return(lastvec)  
 
 
 def lokal_lastvektor(elementlengder, element, fordelte_laster):
@@ -155,9 +131,10 @@ def trans_lokal_lastvektor(fi, lokal_lastvektor):
 
 def trans_global_lastvektor(fi, global_lastvektor):
     
-    # Finner lastvektor i globalt system med ta T x k_matrise
-    T = trans_matrise(fi)
+    # Finner lastvektor i globalt system med ta T(transponert) x k_matrise
+    T = trans_matrise(-fi)
     lastvektor_transformert = np.matmul(np.transpose(T),global_lastvektor)
+
     return lastvektor_transformert
 
 
@@ -173,6 +150,7 @@ def global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, 
         dx = knutepunkter[elementer[i][2]][1] - knutepunkter[elementer[i][1]][1]
         dy = knutepunkter[elementer[i][2]][2] - knutepunkter[elementer[i][1]][2] 
         fi = np.arctan2(dy, dx)
+
 
         # Bestemmer, så transformerer lokal lastvektor til globale koordinater
         lastvektor_lokal = lokal_lastvektor(elementlengder, elementer[i], fordelte_laster ) 
@@ -199,12 +177,12 @@ def global_lastvektor(knutepunkter, elementer, elementlengder, fordelte_laster, 
         glv[m_5] += lastvektor_transformert[4]
         glv[m_6] += lastvektor_transformert[5]
 
-    glv -= punktlaster_vec(knutepunkter, punktlaster) #legger til bidrag fra punktlaster, med negativt fortegn?!
+    glv -= punktlaster_vec(knutepunkter, punktlaster) #legger til bidrag fra punktlaster, med negativt fortegn
     return glv
 
 
 def legg_inn_randbetingelser(knutepunkter, gsm):
-    #skjekker betingelse om punkt er fast innspent eller fritt opplagt, adderer inn stivhet på diagonalen som følge
+    #skjekker betingelse om punkt er fast innspent eller fritt opplagt, ganger inn stivhet på diagonalen som følge
     for i in range(len(knutepunkter)): 
         #1 = fast innspent
         if(knutepunkter[i][3] == 1): 
@@ -259,13 +237,13 @@ def løs_deformasjoner(gsm, glv): #Løser likningssystemet fra global stivhetsma
     return(r) #returnerer vektor med deformasjoner
 
 
-def S_solve(knutepunkter, elementer, elementlengder, r, fordelte_laster):
+def S_solve(knutepunkter, elementer, elementlengder, r, fordelte_laster): #løser endekrefter og endemoment
 
     res = np.empty((len(elementer), 6))  # Oppretter et tomt resultat-array
 
     for x in range(len(elementer)):
         # Henter ut de aktuelle fastinnspenningskreftene
-        fim = lokal_lastvektor(elementlengder, elementer[x], fordelte_laster)
+        fik = lokal_lastvektor(elementlengder, elementer[x], fordelte_laster)
 
         # Henter så ut tverrsnittsdata
         k_lok = element_stivhetsmatrise(elementer[x], elementlengder)
@@ -287,10 +265,10 @@ def S_solve(knutepunkter, elementer, elementlengder, r, fordelte_laster):
 
         # Transformerer deformasjonene tilbake til lokalt koordinatsystem
         v_tot_lokal = trans_global_lastvektor(fi, v_tot)
-        # print(v_tot_lokal)
+
 
         # Løser ligningsystemet i lokalt system, og får kreftene som virker i knutepunktene
-        S = np.dot(k_lok, v_tot_lokal) - fim
+        S = np.dot(k_lok, v_tot_lokal) - fik
 
         # Legger så til disse kreftene i resultatarrayet
         res[x] = S

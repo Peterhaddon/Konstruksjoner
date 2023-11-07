@@ -122,3 +122,23 @@ def assemble_local_to_global(k_local, k_global, node1, node2):
 
     return k_global
 
+
+def fim_vektor(elementlengder, element, fordelte_laster): #IKKE I BRUK?
+
+    element_index = element[0]
+    lastvec = np.zeros(6)
+    for i in range (len(fordelte_laster)): #sjekker om det aktuelle elementet har en fordelt last
+
+        if fordelte_laster[i][1] == element_index:
+            q1 = fordelte_laster[i][2]
+            q2 = fordelte_laster[i][3]
+            l = float(elementlengder[element_index])
+
+            # deler opp lasten i to trekantlaster
+            fim_ende1 = (-1/20) * (q1*l**2) + (-1/30) * (q2*l**2)
+            fim_ende2 = ( 1/30) * (q1*l**2) + ( 1/20) * (q2*l**2)
+
+            #legger fastinnspenningskrefter- og momenter i riktig rekkefølge
+            lastvec = np.array([0, 0, fim_ende1, 0, 0, fim_ende2])
+  
+    return(lastvec)  
