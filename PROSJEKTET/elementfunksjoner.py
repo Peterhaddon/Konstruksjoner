@@ -197,9 +197,9 @@ def maks_spenning(M, N_maks, element): #Finner høyeste spenning i bjelken
 def prosent_flyt(sigma, element): # Hvor mange prosent av flytspenning er maks spenning
     prosent = []
     if element[4] == 'c':
-        prosent.append(np.round((abs(sigma)/210) * 100)) #Flytspenning stål
+        prosent.append(np.round((abs(sigma)/420) * 100)) #Flytspenning stål
     else:
-        prosent.append(np.round((abs(sigma)/210) * 100)) #Flytspenning aluminium
+        prosent.append(np.round((abs(sigma)/250) * 100)) #Flytspenning aluminium
     return prosent
 
 
