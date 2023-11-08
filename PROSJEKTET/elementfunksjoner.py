@@ -220,6 +220,12 @@ def print_momenter(elementer, elementlengder, res, fordelte_laster): #Printer en
 
 
     M_midt = midt_krefter(elementer, elementlengder, res, fordelte_laster)
-    print(f"Elementnr:   M1:          M2:      M midt:")
+
+    print(f"Elementnr:   M1:          M2:      M midt:") # moment
+    # print(f"Elementnr:   Q1:          Q2:") #skjær
+
+
     for i in range(len(elementer)):
-       print(f"{elementer[i][0]:4} {round(res[i][2]):12} {round(res[i][5]):12} {round(M_midt[i]):12}")
+       print(f"{elementer[i][0]:4} {round(res[i][2]):12} {round(res[i][5]):12} {round(M_midt[i]):12}") #Moment
+    #    print(f"{elementer[i][0]:4} {round(res[i][1]):12} {round(res[i][4]):12} ") #Skjaer
+

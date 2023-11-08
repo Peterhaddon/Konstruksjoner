@@ -14,7 +14,7 @@ from plotKrefter import *
 def main():
 
     # bestemmer variabler som er nødvendige for kjøring av funksjoner:
-    file_path = 'PROSJEKTET/Inputfil_JACKET_3.txt'
+    file_path = 'PROSJEKTET/Inputfil_JACKET_2.txt'
     knutepunkter, elementer, fordelte_laster, punktlaster = readfromfile(file_path)
     kp_koordinater, elementer_kp_til_kp = format_data(knutepunkter, elementer)
     elementlengder = lengder(knutepunkter,elementer)
