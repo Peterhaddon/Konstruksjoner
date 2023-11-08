@@ -14,7 +14,7 @@ from plotKrefter import *
 def main():
 
     # bestemmer variabler som er nødvendige for kjøring av funksjoner:
-    file_path = 'PROSJEKTET/Inputfil_JACKET_2.txt'
+    file_path = 'PROSJEKTET/Inputfil_JACKET.txt'
     knutepunkter, elementer, fordelte_laster, punktlaster = readfromfile(file_path)
     kp_koordinater, elementer_kp_til_kp = format_data(knutepunkter, elementer)
     elementlengder = lengder(knutepunkter,elementer)
@@ -32,19 +32,19 @@ def main():
 
 
 
-    #    # Print element og prosent av flyt
+    # #    # Print element og prosent av flyt
     # print_prosent_flyt(elementer, elementlengder, res, fordelte_laster)
     # print_momenter(elementer, elementlengder, res, fordelte_laster)
 
-    #    # Plotter diagrammer:
+    # #    # Plotter diagrammer:
     # plot_moment(elementer, elementlengder, res, fordelte_laster)
     # plot_skjaer(elementer, elementlengder, res, fordelte_laster)
     # plot_normal(elementer, elementlengder, res, fordelte_laster)
 
-    #    # Printer array med [N1, Q1, M1, N2, Q2, M2] for alle elementer
+    # #    # Printer array med [N1, Q1, M1, N2, Q2, M2] for alle elementer
     # print( np.round(res,2))
 
-    #    # Plot Struktur: 
+    # #    # Plot Struktur: 
     # skalering = 1
     # numbers = 1
     # first_index = 0

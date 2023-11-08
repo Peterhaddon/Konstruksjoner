@@ -34,7 +34,8 @@ def plot_moment(elementer, elementlengder, res, fordelte_laster):
         
         else:
             moment = -M1 -Q1*x
-        
+
+        moment = -moment #retter opp fortegnet
 
         # legger til den høyeste verdien for aktuelt element i listen over høyeste moment for alle element
 

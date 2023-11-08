@@ -84,7 +84,7 @@ def global_stivhetsmatrise(knutepunkter, elementer, lengder): #adderer inn stivh
         node1 = element[1]
         node2 = element[2]
 
-        for j in range(3):
+        for j in range(3): #legger det inn riktig plass i global stivhetsmatrise
             for k in range(3):
                 gsm[node1*3 + j, node1*3 + k] += k_transformert[j  ][k  ]
                 gsm[node1*3 + j, node2*3 + k] += k_transformert[j  ][k+3]
